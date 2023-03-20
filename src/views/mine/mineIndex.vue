@@ -32,8 +32,8 @@
     <div class="mine__setting mine__card">
       <div class="mine__card-title">{{ zhTransform('账户设置') }}</div>
       <div class="flex" style="flex-wrap: wrap;">
-        <div class="mine__setting__item" v-for="(item,index) in settingList" :key="index">
-          <span>{{ item }}</span>
+        <div class="mine__setting__item" v-for="(item,index) in settingList" :key="index" @click="onSetGo(item)">
+          <span>{{ zhTransform(item) }}</span>
           <img :src="more" alt="">
         </div>
       </div>
@@ -50,6 +50,7 @@
 <script lang="ts" >
 import {defineComponent, ref} from "vue";
 import {zhTransform}  from '@/utils'
+import { useRouter } from "vue-router"
 import mineBg from '../../assets/mine-bg.png'
 import logo from '../../assets/project-logo.png'
 import sell from '../../assets/mine/mine-sell.png'
@@ -64,25 +65,29 @@ export default defineComponent({
 
   },
   setup() {
+    const router = useRouter()
     const hearList = ref([
       {url: sell, title: zhTransform('我要卖卡')},
       {url: sellRecord, title: zhTransform('卖卡记录')},
       {url: withdraw, title: zhTransform('我要提现')},
       {url: withdrawRecord, title: zhTransform('提现记录')},
     ])
-    const settingList = ref([
-      zhTransform('账号设置'),
-      zhTransform('实名认证'),
-      zhTransform('系统消息'),
-      zhTransform('常见问题'),
-      zhTransform('我的伙伴'),
-      zhTransform('分佣说明'),
-    ])
+    const settingList = ref(['账号设置','实名认证','系统消息','常见问题','我的伙伴','分佣说明'])
     const moreList = ref([
       zhTransform('我的分享码'),
       zhTransform('1分钟了解回收说明'),
       zhTransform('联系我们')
     ])
+    const onSetGo = (title) => {
+      switch (title) {
+        case '账号设置':
+          router.push('/setAccount')
+          break;
+
+        default:
+          break;
+      }
+    }
     return {
       mineBg,
       logo,
@@ -91,7 +96,8 @@ export default defineComponent({
       more,
       settingList,
       moreList,
-      zhTransform
+      zhTransform,
+      onSetGo
     }
   },
 })

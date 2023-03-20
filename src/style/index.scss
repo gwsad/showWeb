@@ -1,0 +1,44 @@
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-space {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.common-page {
+  min-height: 100vh;
+  background: #f8fbff;
+}
+
+.common-btn {
+  width: 75rem;
+  height: 16rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  div {
+    width: 69rem;
+    height: 10rem;
+    background: linear-gradient(180deg, #42CFFF 0%, #1E9AFF 100%);
+    border-radius: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
+    color: #fff;
+  }
+}
+
+.bg-fff {
+  background: #fff;
+}

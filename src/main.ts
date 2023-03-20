@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import './registerServiceWorker'
-import './style/index.css'
+import './style/index.scss'
 import router from './router'
 import store from './store'
 import { Swipe, SwipeItem } from 'vant';

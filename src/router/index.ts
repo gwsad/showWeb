@@ -51,6 +51,38 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/setAccount',
+    name: 'setAccount',
+    component: () => import("@/views/mine/setAccount.vue"),
+    meta: {
+      title: "账户设置"
+    }
+  },
+  {
+    path: '/modifyName',
+    name: 'modifyName',
+    component: () => import("@/views/mine/modifyName.vue"),
+    meta: {
+      title: "昵称修改"
+    }
+  },
+  {
+    path: '/realName',
+    name: 'realName',
+    component: () => import("@/views/mine/realName.vue"),
+    meta: {
+      title: "实名认证"
+    }
+  },
+  {
+    path: '/setPassword',
+    name: 'setPassword',
+    component: () => import("@/views/mine/setPassword.vue"),
+    meta: {
+      title: "设置/修改交易密码"
+    }
+  },
+  {
     path: '/couponsSell',
     name: 'couponsSell',
     component: () => import("@/views/order/couponsSell.vue"),
