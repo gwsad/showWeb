@@ -83,6 +83,14 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/systemInfo',
+    name: 'systemInfo',
+    component: () => import("@/views/order/systemInfo.vue"),
+    meta: {
+      title: "系统公告"
+    }
+  },
+  {
     path: '/couponsSell',
     name: 'couponsSell',
     component: () => import("@/views/order/couponsSell.vue"),

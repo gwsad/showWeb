@@ -83,7 +83,9 @@ export default defineComponent({
         case '账号设置':
           router.push('/setAccount')
           break;
-
+        case '系统消息':
+          router.push('/systemInfo')
+          break;
         default:
           break;
       }
