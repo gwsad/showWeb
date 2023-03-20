@@ -35,14 +35,15 @@ export default ({ command, mode }) => {
     resolve: {
       alias
     },
-    proxy: { // 本地开发环境通过代理实现跨域，生产环境使用 nginx 转发
-      // 正则表达式写法
-      '^/api': {
-        target: 'http://54.249.49.8:7001', // 后端服务实际地址
-        changeOrigin: true, //开启代理
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    },
+    // proxy: {
+    //   "/api": {
+    //     target: "http://54.249.49.8:7001",
+    //     changeOrigin: true, // 设置这个参数可以避免跨域
+    //     pathRewrite: {
+    //       "^/api": "/"
+    //     }
+    //   }
+    // },
     // 服务端渲染
     server: {
       // 是否开启 https
