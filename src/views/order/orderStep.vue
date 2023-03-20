@@ -27,6 +27,7 @@ const orderStepList = ref([
 .orderStep{
   padding-top: 3rem;
   background: #f8fbff;
+  min-height: 100vh;
   .orderStep__item{
     width: 69rem;
     margin: 0 auto 3rem;

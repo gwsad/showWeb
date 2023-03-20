@@ -325,6 +325,7 @@ const onGoPage = (title) => {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
     div{
       width: 69rem;
       height: 10rem;

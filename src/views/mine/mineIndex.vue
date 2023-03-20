@@ -40,8 +40,8 @@
     </div>
     <div class="mine__more mine__card">
       <div class="mine__card-title">{{ zhTransform('更多功能') }}</div>
-      <div class="mine__more__list flex-space" v-for="(item,index) in moreList" :key="index">
-        <span>{{ item }}</span>
+      <div class="mine__more__list flex-space" v-for="(item,index) in moreList" :key="index" @click="onMorePage(item)">
+        <span>{{ zhTransform(item) }}</span>
         <img :src="more" alt="">
       </div>
     </div>
@@ -73,11 +73,7 @@ export default defineComponent({
       {url: withdrawRecord, title: zhTransform('提现记录')},
     ])
     const settingList = ref(['账号设置','实名认证','系统消息','常见问题','我的伙伴','分佣说明'])
-    const moreList = ref([
-      zhTransform('我的分享码'),
-      zhTransform('1分钟了解回收说明'),
-      zhTransform('联系我们')
-    ])
+    const moreList = ref(['我的分享码','1分钟了解回收说明','关于平台的回收流程'])
     const onSetGo = (title) => {
       switch (title) {
         case '账号设置':
@@ -86,6 +82,17 @@ export default defineComponent({
         case '系统消息':
           router.push('/systemInfo')
           break;
+        default:
+          break;
+      }
+    }
+    const onMorePage = (title) => {
+      switch (title) {
+        case '关于平台的回收流程':
+          console.log('1111')
+          router.push('/orderStep')
+          break;
+
         default:
           break;
       }
@@ -99,7 +106,8 @@ export default defineComponent({
       settingList,
       moreList,
       zhTransform,
-      onSetGo
+      onSetGo,
+      onMorePage
     }
   },
 })
@@ -180,6 +188,7 @@ export default defineComponent({
     .mine__account__withdraw{
       span{
         color: #7D8899;
+        font-size: 2rem;
       }
       img{
         width: 3.2rem;
@@ -214,6 +223,7 @@ export default defineComponent({
       display: flex;
       align-items: center;
       justify-content: space-between;
+      font-size: 2rem;
       img{
         width: 3.2rem;
         height: 3.2rem;
@@ -234,6 +244,7 @@ export default defineComponent({
   }
   .mine__more{
     margin-top: 3rem;
+    font-size: 2rem;
     .mine__more__list{
       border-top: 0.1rem solid rgba(0,0,0,0.2);
       height: 8.8rem;

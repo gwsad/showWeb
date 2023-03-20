@@ -5,10 +5,10 @@
         <span>{{ zhTransform('手机号码') }}</span>
         <span>{{ zhTransform('456789') }}</span>
       </div>
-      <div class="flex-space">
+      <!-- <div class="flex-space">
         <field v-model="newPassword" :placeholder="zhTransform('请输入验证码')" />
         <span :class="{'red-font' : getCode === '获取验证码'}">{{ zhTransform(getCode) }}</span>
-      </div>
+      </div> -->
     </div>
     <div class="setPassword__body bg-fff">
       <field v-model="newPassword" :placeholder="zhTransform('请输入新交易密码')" />
@@ -32,6 +32,7 @@ const getCode = ref('获取验证码')
 .setPassword{
   .setPassword__head{
     padding: 0 3rem;
+    font-size: 2.6rem;
     div{
       display: flex;
       align-items: center;

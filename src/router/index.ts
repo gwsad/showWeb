@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Layout from '@/layout/layoutIndex.vue'
+import Layout from '../layout/layoutIndex.vue'
 import {zhTransform}  from '@/utils'
 const routes: Array<RouteRecordRaw> = [
   {
@@ -101,7 +101,7 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
 })
 

@@ -22,7 +22,6 @@ import emptyIconOrder from '@/assets/enter-order-2.png'
 import selectIconMine from '@/assets/enter-mine-1.png'
 import emptyIconMine from '@/assets/enter-mine-2.png'
 const route = useRoute();
-console.log(route.path)
 const navigationList = ref([
   {
     name: zhTransform("首页"),

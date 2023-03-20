@@ -36,7 +36,7 @@
 </template>
 <script lang="ts">
 import {Swipe, SwipeItem} from 'vant';
-import {defineComponent, ref} from "vue";
+import {defineComponent, ref, onMounted} from "vue";
 import {zhTransform}  from '@/utils'
 import phone from '../../assets/home-phone.png'
 import game from '../../assets/home-game.png'
@@ -45,6 +45,7 @@ import shop from '../../assets/home-shop.png'
 import transform from '../../assets/home-transform.png'
 import homeBanner from '../../assets/home-banner.png'
 import homeHot from '../../assets/home-hot.png'
+import { getHomeMessage } from '@/api/home'
 export default defineComponent({
   components: {
     [Swipe.name]: Swipe,
@@ -53,7 +54,7 @@ export default defineComponent({
   setup() {
     const messageList = ref([
       {time: '2023-11-11',text: zhTransform('您有一笔订单已经完成，请及时查看大街上打底裤和大家阿克索德好看')},
-      {time: '2023-11-11',text: zhTransform('您有二笔订单已经完成，请及时查看')},
+      {time: '2023-11-11',text: zhTransform('您有二笔订单已经完成，请及时查看')}
     ])
     const navList = ref([
       {imgUrl: phone, title: zhTransform('话费卡')},
@@ -72,6 +73,11 @@ export default defineComponent({
       {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')}
     ])
 
+    onMounted(async ()=>{
+      let res = await getHomeMessage()
+      console.log('res',res)
+    })
+
     return {
       messageList,
       navList,
@@ -86,6 +92,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .home{
+  text-align: center;
   .home__head{
     width: 100vh;
     height: 24.8rem;
