@@ -50,7 +50,8 @@
     "src/**/*.vue",
     "types/*.d.ts",
     "vite.config.ts",
-    "src/views/example/config/table.ts"
+    "src/views/example/config/table.ts",
+    ".d.ts"
   ],
   "exclude": [
     "node_modules",

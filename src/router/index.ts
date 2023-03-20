@@ -40,16 +40,24 @@ const routes: Array<RouteRecordRaw> = [
           title: "个人中心"
         }
       },
-      {
-        path: 'orderStep',
-        name: 'orderStep',
-        component: () => import("@/views/order/orderStep.vue"),
-        meta: {
-          title: "交易步骤"
-        }
-      }
     ]
   },
+  {
+    path: '/orderStep',
+    name: 'orderStep',
+    component: () => import("@/views/order/orderStep.vue"),
+    meta: {
+      title: "交易步骤"
+    }
+  },
+  {
+    path: '/couponsSell',
+    name: 'couponsSell',
+    component: () => import("@/views/order/couponsSell.vue"),
+    meta: {
+      title: "卡券出售"
+    }
+  }
 ]
 
 const router = createRouter({
@@ -58,8 +66,6 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const meta = to.meta
-  const storeToken = localStorage.getItem('token')
   if (typeof (to.meta?.title) === 'string') {
     document.title = zhTransform(to.meta?.title);
   }

@@ -51,17 +51,17 @@ export default defineComponent({
     [SwipeItem.name]: SwipeItem
   },
   setup() {
-    const messageList: any = ref([
+    const messageList = ref([
       {time: '2023-11-11',text: zhTransform('您有一笔订单已经完成，请及时查看大街上打底裤和大家阿克索德好看')},
       {time: '2023-11-11',text: zhTransform('您有二笔订单已经完成，请及时查看')},
     ])
-    const navList: any = ref([
+    const navList = ref([
       {imgUrl: phone, title: zhTransform('话费卡')},
       {imgUrl: game, title: zhTransform('游戏卡')},
       {imgUrl: come, title: zhTransform('加油卡')},
       {imgUrl: shop, title: zhTransform('电商卡')},
     ])
-    const cardList:any = ref([
+    const cardList = ref([
       {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
       {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
       {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
