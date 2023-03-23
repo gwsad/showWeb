@@ -8,7 +8,7 @@
         </div>
         <img :src="logo" alt="">
       </div>
-      <div class="setAccount__head__btn">{{ zhTransform('去进行认证') }}</div>
+      <div class="setAccount__head__btn" @click="OnRealName()">{{ zhTransform('去进行认证') }}</div>
     </div>
     <div class="setAccount__count">
       <div v-for="(item,index) in countList" :key="index" class="setAccount__count__item" @click="onPage(item.title)">
@@ -23,6 +23,7 @@
 </template>
 <script lang="ts" setup>
 import {ref} from "vue";
+import { showConfirmDialog } from 'vant'
 import {zhTransform}  from '@/utils'
 import { useRouter } from "vue-router"
 import logo from '../../assets/project-logo.png'
@@ -30,7 +31,7 @@ import more from '../../assets/project-more.png'
 const router = useRouter()
 const countList = ref([
   {title: '昵称修改', count: '',isShowMore: true},
-  {title: '实名认证', count: '',isShowMore: true},
+  // {title: '实名认证', count: '',isShowMore: true},
   {title: '提现账号', count: '',isShowMore: true},
   {title: '交易密码', count: '修改交易密码',isShowMore: true},
   {title: '手机号码', count: '18516103658',isShowMore: false},
@@ -38,6 +39,9 @@ const countList = ref([
   {title: '退出登录', count: '',isShowMore: true},
   {title: '注销账号', count: '',isShowMore: true},
 ])
+const OnRealName = () => {
+  router.push('/realName')
+}
 const onPage = (title: string) => {
   switch (title) {
     case '昵称修改':
@@ -48,6 +52,22 @@ const onPage = (title: string) => {
       break;
     case '交易密码':
       router.push('/setPassword')
+      break;
+    case '退出登录':
+      showConfirmDialog({
+        title: '退出登录',
+        message:'确认退出程序！',})
+      .then(() => {
+        console.log('confirm')
+      })
+      break;
+    case '注销账号':
+      showConfirmDialog({
+        title: '注销账号',
+        message:'确认注销程序！',})
+      .then(() => {
+        console.log('confirm')
+      })
       break;
     default:
       break;

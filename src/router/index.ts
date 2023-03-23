@@ -105,6 +105,22 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: "注册"
     }
+  },
+  {
+    path: '/shareIllustrate',
+    name: 'shareIllustrate',
+    component: () => import("@/views/extra/shareIllustrate.vue"),
+    meta: {
+      title: "分拥说明"
+    }
+  },
+  {
+    path: '/toUnderstand',
+    name: 'toUnderstand',
+    component: () => import("@/views/extra/toUnderstand.vue"),
+    meta: {
+      title: "回收说明"
+    }
   }
 ]
 

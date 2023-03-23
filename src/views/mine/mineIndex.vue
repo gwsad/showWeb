@@ -12,9 +12,9 @@
         </div>
       </div>
       <div class="mine__info-head__list flex">
-          <div v-for="(item,index) in hearList" :key="index">
+          <div v-for="(item,index) in hearList" :key="index" @click="onInfoHead(index)">
             <img :src="item.url" alt="">
-            <div>{{ item.title }}</div>
+            <div>{{ zhTransform(item.title) }}</div>
           </div>
         </div>
     </div>
@@ -74,13 +74,37 @@ export default defineComponent({
     ])
     const settingList = ref(['账号设置','实名认证','系统消息','常见问题','我的伙伴','分佣说明'])
     const moreList = ref(['我的分享码','1分钟了解回收说明','关于平台的回收流程'])
+    const onInfoHead = ref((index) => {
+      switch (index) {
+        case 0:
+          router.push('/couponsSell')
+          break;
+        case 1:
+          router.push('/enter/order')
+          break;
+        case 2:
+          router.push('/withdraw')
+          break;
+        case 3:
+          router.push('/withdrawRecord')
+          break;
+        default:
+          break;
+      }
+    })
     const onSetGo = (title) => {
       switch (title) {
         case '账号设置':
           router.push('/setAccount')
           break;
+        case '实名认证':
+          router.push('/realName')
+          break;
         case '系统消息':
           router.push('/systemInfo')
+          break;
+        case '分佣说明':
+          router.push('/shareIllustrate')
           break;
         default:
           break;
@@ -89,8 +113,10 @@ export default defineComponent({
     const onMorePage = (title) => {
       switch (title) {
         case '关于平台的回收流程':
-          console.log('1111')
           router.push('/orderStep')
+          break;
+        case '1分钟了解回收说明':
+          router.push('/toUnderstand')
           break;
 
         default:
@@ -107,7 +133,8 @@ export default defineComponent({
       moreList,
       zhTransform,
       onSetGo,
-      onMorePage
+      onMorePage,
+      onInfoHead
     }
   },
 })
