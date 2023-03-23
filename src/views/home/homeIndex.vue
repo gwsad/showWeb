@@ -11,12 +11,7 @@
         <van-swipe-item v-for="(item,index) in messageList" :key="index">{{item.text}}</van-swipe-item>
       </van-swipe>
     </div>
-    <div class="home__nav">
-      <div v-for="(item,index) in navList" :key="index" class="home__nav__item">
-        <img :src="item.imgUrl" alt="">
-        <div>{{item.title}}</div>
-      </div>
-    </div>
+    <kind @onChoseKind="onChoseKind" />
     <div class="home__transform">
       <img :src="transform" alt="">
     </div>
@@ -26,22 +21,17 @@
       <span>{{ zhTransform('热门兑换') }}</span>
     </div>
     <div class="home__content">
-      <div class="home__content__item" v-for="(item,index) in cardList" :key="index">
-        <img src="" alt="">
-        <div>{{ item.title }}</div>
-        <div class="home__content__item__discount">{{ item.discount }}</div>
-      </div>
+      <cardList :list="cardList" @onChoseCard="onChoseCard" />
     </div>
   </div>
 </template>
 <script lang="ts">
 import {Swipe, SwipeItem} from 'vant';
 import {defineComponent, ref, onMounted} from "vue";
+import { useRouter } from "vue-router"
+import kind from '@/components/kind.vue'
+import cardList from '@/components/cardList.vue'
 import {zhTransform}  from '@/utils'
-import phone from '../../assets/home-phone.png'
-import game from '../../assets/home-game.png'
-import come from '../../assets/home-come.png'
-import shop from '../../assets/home-shop.png'
 import transform from '../../assets/home-transform.png'
 import homeBanner from '../../assets/home-banner.png'
 import homeHot from '../../assets/home-hot.png'
@@ -49,18 +39,15 @@ import { getHomeMessage } from '@/api/home'
 export default defineComponent({
   components: {
     [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem
+    [SwipeItem.name]: SwipeItem,
+    kind,
+    cardList
   },
   setup() {
+    const router = useRouter()
     const messageList = ref([
       {time: '2023-11-11',text: zhTransform('您有一笔订单已经完成，请及时查看大街上打底裤和大家阿克索德好看')},
       {time: '2023-11-11',text: zhTransform('您有二笔订单已经完成，请及时查看')}
-    ])
-    const navList = ref([
-      {imgUrl: phone, title: zhTransform('话费卡')},
-      {imgUrl: game, title: zhTransform('游戏卡')},
-      {imgUrl: come, title: zhTransform('加油卡')},
-      {imgUrl: shop, title: zhTransform('电商卡')},
     ])
     const cardList = ref([
       {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
@@ -72,6 +59,12 @@ export default defineComponent({
       {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
       {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')}
     ])
+    const onChoseKind = (kind: string) => {
+      router.push({path: '/couponsSell', query: {kind}})
+    }
+    const onChoseCard = (card: any) => {
+      router.push({path: '/couponsSell', query: {card}})
+    }
 
     onMounted(async ()=>{
       let res = await getHomeMessage()
@@ -80,12 +73,13 @@ export default defineComponent({
 
     return {
       messageList,
-      navList,
       transform,
       homeBanner,
       homeHot,
       cardList,
-      zhTransform
+      zhTransform,
+      onChoseKind,
+      onChoseCard
     }
   },
 })
@@ -145,27 +139,6 @@ export default defineComponent({
       -webkit-line-clamp:1; //显示的行
     }
   }
-  .home__nav{
-    width: 69rem;
-    margin: 3rem auto 0;
-    display: flex;
-    justify-content: space-between;
-    .home__nav__item{
-      width: 15.3rem;
-      height: 17.8rem;
-      border-radius: 1.8rem;
-      box-shadow: 0px 6px 14px 0px rgba(0, 0, 0, 0.02);
-      background: #fff;
-      padding: 2rem;
-      box-sizing: border-box;
-      font-size: 2.6rem;
-      img{
-        width: 8.8rem;
-        height: 8.8rem;
-        margin-bottom: 1.6rem;
-      }
-    }
-  }
   .home__transform{
     width: 69rem;
     height: 8.8rem;
@@ -203,39 +176,6 @@ export default defineComponent({
     display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
-    .home__content__item{
-      width: 21rem;
-      height: 27.7rem;
-      border-radius: 1.8rem;
-      box-shadow: 0px 6px 14px 0px rgba(0, 0, 0, 0.02);
-      padding: 3rem;
-      box-sizing: border-box;
-      margin-right: 3rem;
-      margin-bottom: 3rem;
-      img{
-        width: 10.8rem;
-        height: 10.8rem;
-        margin-bottom: 2rem;
-      }
-      div{
-        text-align: center;
-        font-size: 2.6rem;
-      }
-      .home__content__item__discount{
-        margin: 2.6rem auto 0;
-        width: 12.8rem;
-        height: 3.2rem;
-        border-radius: 0.4rem;
-        background: #FFD7D7;
-        font-size: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-    .home__content__item:nth-child(3n){
-      margin-right: 0;
-    }
   }
 }
 </style>

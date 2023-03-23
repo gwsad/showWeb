@@ -97,6 +97,14 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: "卡券出售"
     }
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import("@/views/home/registerIndex.vue"),
+    meta: {
+      title: "注册"
+    }
   }
 ]
 

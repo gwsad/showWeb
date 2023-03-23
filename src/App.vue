@@ -29,5 +29,6 @@
   width: 100vw;
   overflow-x: hidden;
   overflow-y: auto;
+  font-size: 2rem;
 }
 </style>
