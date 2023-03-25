@@ -1,6 +1,5 @@
 <template>
   <div class="orderList">
-    <img class="orderList__bg" :src="orderBg" alt="">
     <div class="orderList__tab">
       <div class="orderList__tab__item" v-for="(item,index) in tabList" :key="index" @click="onChoseTab(item.value)">
         <div :class="{ 'tab-chose': tab === item.value }">{{ zhTransform(item.name) }}</div>
@@ -15,7 +14,7 @@
         </div>
         <div class="orderList__body__item__desc">
           <div>{{ item.price }}</div>
-          <div class="orderList__body__item__desc__common" :class="{'orderList__body__item__desc__finished': item.status !== 1}">{{ zhTransform(item.status === 1 ? '处理中' : '已完成') }}</div>
+          <div class="orderList__body__item__desc__common" :class="{'orderList__body__item__desc__1': item.status === 0 || item.status === 1,'orderList__body__item__desc__2' : item.status === 2,'orderList__body__item__desc__3' : item.status === 3}">{{ zhTransform(item.status === 0 ? '审批中' : item.status === 1 ? '打款中' : item.status === 2  ? '审批失败' : '已完成') }}</div>
         </div>
       </div>
     </div>
@@ -28,15 +27,16 @@ import orderBg from '@/assets/order-bg.png'
 import tabChose from '@/assets/table-chose.png'
 
 const tabList = ref([
-  { name: '全部订单', value: 0 },
-  { name: '正在处理', value: 1 },
-  { name: '处理完成', value: 2 }
+  { name: '正在审批', value: 0 },
+  { name: '正在打款', value: 1 },
+  { name: '审批失败', value: 2 },
+  { name: '打款成功', value: 3 },
 ])
 const cardList = ref([
   {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 0,price: 'HK$ 80.00'},
   {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 0,price: 'HK$ 80.00'},
-  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 0,price: 'HK$ 80.00'},
-  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 0,price: 'HK$ 80.00'}
+  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 2,price: 'HK$ 80.00'},
+  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 3,price: 'HK$ 80.00'}
 ])
 const tab = ref(0)
 const onChoseTab = (value: number) => {
@@ -45,30 +45,19 @@ const onChoseTab = (value: number) => {
 </script>
 <style lang="scss" scoped>
 .orderList{
-  padding-top: 26rem;
-  min-height: 100vh;
-  box-sizing: border-box;
-  .orderList__bg{
-    width: 75rem;
-    height: 18.2rem;
-    position: fixed;
-    top: 0;
-  }
+  background: #f8fbff;
   .orderList__tab{
-    width: 70.2rem;
+    width: 75rem;
     height: 11.7rem;
     display: flex;
-    top: 12rem;
-    left: 0;
-    right: 0;
     justify-content: space-between;
-    margin: 0 auto;
     background: #fff;
-    position: fixed;
+    position: relative;
     z-index: 2;
     padding: 3.4rem 5.9rem 3.2rem;
     box-sizing: border-box;
-    border-radius: 1.8rem;
+    position: fixed;
+    top: 0;
     .orderList__tab__item{
       width: 11rem;
       text-align: center;
@@ -84,11 +73,11 @@ const onChoseTab = (value: number) => {
     }
   }
   .orderList__body{
-    width: 70.2rem;
-    margin: 0 auto;
+    width: 75rem;
+    margin: 14.7rem auto;
     background: #fff;
     border-radius: 1.8rem;
-    padding: 3.4rem 5.9rem 3.2rem;
+    padding: 0rem 5.9rem 3.2rem;
     box-sizing: border-box;
     .orderList__body__item{
       height: 14.3rem;
@@ -120,10 +109,19 @@ const onChoseTab = (value: number) => {
           background: #D7FFDB;
           color: #07BF03;
           border-radius: 0.6rem;
+          font-size: 2rem;
+          text-align: center;
         }
-        .orderList__body__item__desc__finished{
+        .orderList__body__item__desc__1{
+          background: #D7FFDB;
+        }
+        .orderList__body__item__desc__2{
+          background: #FB1639;
+          color: #fff;
+        }
+        .orderList__body__item__desc__3{
           background: #B0B7C1;
-          color: #FFFFFF;
+          color: #fff;
         }
       }
     }

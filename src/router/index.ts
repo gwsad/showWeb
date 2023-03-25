@@ -121,7 +121,55 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: "回收说明"
     }
-  }
+  },
+  {
+    path: '/shareCode',
+    name: 'shareCode',
+    component: () => import("@/views/extra/shareCode.vue"),
+    meta: {
+      title: "分享码"
+    }
+  },
+  {
+    path: '/choseBank',
+    name: 'choseBank',
+    component: () => import("@/views/extra/choseBank.vue"),
+    meta: {
+      title: "选择银行账户"
+    }
+  },
+  {
+    path: '/partner',
+    name: 'partner',
+    component: () => import("@/views/extra/partner.vue"),
+    meta: {
+      title: "我的伙伴"
+    }
+  },
+  {
+    path: '/question',
+    name: 'question',
+    component: () => import("@/views/extra/commonQuestion.vue"),
+    meta: {
+      title: "常见问题"
+    }
+  },
+  {
+    path: '/withdraw',
+    name: 'withdraw',
+    component: () => import("@/views/extra/withdraw.vue"),
+    meta: {
+      title: "我要提现"
+    }
+  },
+  {
+    path: '/withdrawalsRecords',
+    name: 'withdrawalsRecords',
+    component: () => import("@/views/extra/withdrawalsRecords.vue"),
+    meta: {
+      title: "提现记录"
+    }
+  },
 ]
 
 const router = createRouter({

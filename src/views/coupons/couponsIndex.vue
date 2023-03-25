@@ -53,19 +53,26 @@ const onChoseTab = (value: number) => {
 </script>
 <style lang="scss" scoped>
 .coupons{
+  padding-top: 26rem;
   min-height: 100vh;
+  box-sizing: border-box;
   .coupons__bg{
     width: 75rem;
     height: 18.2rem;
+    position: fixed;
+    top: 0;
   }
   .coupons__tab{
+    position: fixed;
+    top: 12rem;
+    left: 0;
+    right: 0;
     width: 70.2rem;
     height: 11.7rem;
     display: flex;
     justify-content: space-between;
-    margin: -7.2rem auto 0;
+    margin: 0 auto;
     background: #fff;
-    position: relative;
     z-index: 2;
     padding: 3.4rem 5.9rem 3.2rem;
     box-sizing: border-box;

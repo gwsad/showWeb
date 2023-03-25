@@ -14,19 +14,19 @@
     <div class="register__info">
       <div class="register__info__item">
         <div>{{ zhTransform('手机号码：') }}</div>
-        <input type="text" placeholder="请输入手机号码">
+        <input type="text" :placeholder="zhTransform('请输入手机号码')">
       </div>
       <div class="register__info__item">
         <div>{{ zhTransform('邀请码：') }}</div>
-        <input type="text" placeholder="请输入邀请码">
+        <input type="text" :placeholder="zhTransform('请输入邀请码')">
       </div>
       <div class="register__info__item">
         <div>{{ zhTransform('密码：') }}</div>
-        <input type="text" placeholder="请输入密码">
+        <input type="text" :placeholder="zhTransform('请输入密码')">
       </div>
     </div>
-    <action-sheet v-model:show="show" :actions="actions" @select="onSelect" title="标题"></action-sheet>
-    <div class="common-btn">
+    <action-sheet v-model:show="show" :actions="actions" @select="onSelect" :title="zhTransform('选择地区')" @close="onClose"></action-sheet>
+    <div class="common-btn" v-show="showBtn">
       <div>{{ zhTransform('确定') }}</div>
     </div>
   </div>
@@ -38,9 +38,15 @@ import logo from '@/assets/project-logo.png'
 import more from '@/assets/project-more.png'
 import { ActionSheet } from 'vant';
 const show = ref(false)
-const actions = ref([{name:'香港特别行政区'},{name:'澳门特别行政区'},{name:'中国台湾'},{name:'中国大陆'}])
+const showBtn = ref(true)
+const actions = ref([{name:zhTransform('中国大陆')},{name:zhTransform('中国台湾')},{name:zhTransform('香港特别行政区')},{name:zhTransform('澳门特别行政区')}])
 const onChoseNation = () => {
   show.value = true
+  showBtn.value = false
+}
+const onClose = () => {
+  show.value = false
+  showBtn.value = true
 }
 const onSelect = (action: any) => {
   console.log(action)

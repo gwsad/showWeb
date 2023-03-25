@@ -37,7 +37,7 @@ export default ({ command, mode }) => {
     },
     // proxy: {
     //   "/api": {
-    //     target: "http://54.249.49.8:7001",
+    //     target: "http://192.168.31.136:7001",
     //     changeOrigin: true, // 设置这个参数可以避免跨域
     //     pathRewrite: {
     //       "^/api": "/"

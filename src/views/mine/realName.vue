@@ -42,10 +42,10 @@ const infoList = ref([
       justify-content: space-between;
       align-items: center;
       border-top: 0.1rem solid rgba(0,0,0,.1);
-      font-size: 1.8rem;
+      font-size: 2.4rem;
       .van-field{
         width: 30rem;
-        font-size: 1.8rem;
+        font-size: 2.4rem;
         input{
           text-align: right;
         }

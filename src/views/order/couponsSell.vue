@@ -197,6 +197,7 @@ const onChoseCard = (value) => {
 }
 const onGoPage = (title) => {
   title === zhTransform('交易步骤') && router.push('/orderStep')
+  title === zhTransform('常见问题') && router.push('/question')
 }
 const onShowExample = (value) => {
   showExample.value = value
@@ -207,6 +208,8 @@ const onShowExample = (value) => {
   padding: 3rem;
   background: #f8fbff;
   min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: 120px;
   .coupons-sell__common{
     padding: 0 2rem;
     width: 69rem;

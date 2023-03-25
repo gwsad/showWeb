@@ -25,7 +25,6 @@ const onChoseCard = (id: string) => {
 .card{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 .card__content{
   width: 21rem;

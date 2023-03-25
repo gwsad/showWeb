@@ -86,7 +86,7 @@ export default defineComponent({
           router.push('/withdraw')
           break;
         case 3:
-          router.push('/withdrawRecord')
+          router.push('/withdrawalsRecords')
           break;
         default:
           break;
@@ -103,6 +103,12 @@ export default defineComponent({
         case '系统消息':
           router.push('/systemInfo')
           break;
+        case '常见问题':
+          router.push('/question')
+          break;
+        case '我的伙伴':
+          router.push('/partner')
+          break;
         case '分佣说明':
           router.push('/shareIllustrate')
           break;
@@ -114,6 +120,9 @@ export default defineComponent({
       switch (title) {
         case '关于平台的回收流程':
           router.push('/orderStep')
+          break;
+        case '我的分享码':
+          router.push('/shareCode')
           break;
         case '1分钟了解回收说明':
           router.push('/toUnderstand')
@@ -177,6 +186,7 @@ export default defineComponent({
       position: absolute;
       top: 21.6rem;
       left: 8.2rem;
+      text-align: center;
       img{
         width: 6.4rem;
         height: 6.4rem;
