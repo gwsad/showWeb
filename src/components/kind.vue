@@ -1,27 +1,31 @@
 <template>
   <div class="kind__nav">
-    <div v-for="(item,index) in kindList" :key="index" class="kind__nav__item" @click="onChoseKind(item.title)">
+    <div v-for="(item,index) in kindList" :key="index" class="kind__nav__item" @click="onChoseKind(item)">
       <img :src="item.imgUrl" alt="">
-      <div>{{ zhTransform(item.title) }}</div>
+      <div>{{ zhTransform(item.title + '卡') }}</div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import {ref,defineEmits} from "vue";
 import {zhTransform}  from '@/utils'
+import { useCouponCatHook } from '@/store/modules/card'
 import phone from '@/assets/home-phone.png'
 import game from '@/assets/home-game.png'
 import come from '@/assets/home-come.png'
 import shop from '@/assets/home-shop.png'
 const emit = defineEmits(['onChoseKind'])
 const kindList = ref([
-  {imgUrl: phone, title: zhTransform('话费卡')},
-  {imgUrl: game, title: zhTransform('游戏卡')},
-  {imgUrl: come, title: zhTransform('加油卡')},
-  {imgUrl: shop, title: zhTransform('电商卡')}
+  {imgUrl: phone, title: zhTransform('话费')},
+  {imgUrl: game, title: zhTransform('游戏')},
+  {imgUrl: come, title: zhTransform('加油')},
+  {imgUrl: shop, title: zhTransform('电商')}
 ])
-const onChoseKind = (title: string) => {
-  emit('onChoseKind', title)
+kindList.value.forEach((item: any) => {
+  item._id = useCouponCatHook().couponCat.find((i) => i.name === item.title)._id
+})
+const onChoseKind = (data) => {
+  emit('onChoseKind', data)
 }
 </script>
 <style lang="scss" scoped>

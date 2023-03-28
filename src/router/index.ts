@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '../layout/layoutIndex.vue'
 import {zhTransform}  from '@/utils'
+import {getToken} from '@/utils/auth'
+import { showToast } from 'vant';
+import { useUserStoreHook, } from "@/store/modules/user";
+import { useCouponCatHook } from "@/store/modules/card";
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/enter',
@@ -170,6 +174,22 @@ const routes: Array<RouteRecordRaw> = [
       title: "提现记录"
     }
   },
+  {
+    path: '/promotionDetails',
+    name: 'promotionDetails',
+    component: () => import("@/views/extra/promotionDetails.vue"),
+    meta: {
+      title: "推广收益明细"
+    }
+  },
+  {
+    path: '/accountOption',
+    name: 'accountOption',
+    component: () => import("@/views/extra/accountOption.vue"),
+    meta: {
+      title: "选择提现账户"
+    }
+  },
 ]
 
 const router = createRouter({
@@ -181,7 +201,25 @@ router.beforeEach(async (to, from, next) => {
   if (typeof (to.meta?.title) === 'string') {
     document.title = zhTransform(to.meta?.title);
   }
-
+  if(!getToken()){
+    // if (to.path.indexOf('/enter') !== -1 || to.path.indexOf('/setAccount') !== -1) {
+    //   try {
+    //     await useCouponCatHook().setCouponCat();
+    //     await useUserStoreHook().handleGetUserInfo();
+    //   } catch (error) {
+    //     showToast('用户信息失效，请重新登录！')
+    //     next('/register')
+    //   }
+    // }
+    next()
+  }else{
+    if(to.path === '/register'){
+      next()
+    }else{
+      showToast('用户信息失效，请重新登录！')
+      next('/register')
+    }
+  }
   next()
 })
 

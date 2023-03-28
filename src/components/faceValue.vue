@@ -1,6 +1,6 @@
 <template>
   <div class="face">
-    <div class="face__item" v-for="(item,index) in list" :key="index">
+    <div class="face__item" v-for="(item,index) in list" :key="index" @click="onChoseCard(item)">
       <h1>{{ zhTransform(item.title) }}</h1>
       <div>
         <span>{{ zhTransform(item.price) }}</span>
@@ -12,15 +12,15 @@
 <script lang="ts" setup>
 import {defineEmits,defineProps} from "vue";
 import {zhTransform}  from '@/utils'
-const emit = defineEmits(['onChoseCard'])
+const emit = defineEmits(['onChoseFace'])
 const props = defineProps({
   list: {
     type: Array,
     default: () => ([])
   }
 })
-const onChoseCard = (id: string) => {
-  emit('onChoseCard', id)
+const onChoseCard = (data) => {
+  emit('onChoseFace', data)
 }
 </script>
 <style lang="scss" scoped>

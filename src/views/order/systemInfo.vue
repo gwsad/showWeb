@@ -15,13 +15,7 @@ import {zhTransform}  from '@/utils'
 import system from '@/assets/system-info.png'
 const systemList = ref([
   {
-    url: system,title: '标题',desc: "ghadshajgdgjadg"
-  },
-  {
-    url: system,title: '',desc: ""
-  },
-  {
-    url: system,title: '',desc: ""
+    url: system,title: '请确保充值卡的来源合法',desc: "请确保充值卡的来源合法，京顺回收拒绝一切通过传销、诈骗、洗钱等非法手段获取的充值卡，一经发现异常情况，港回收有义务向公安机关反映。"
   }
 ])
 </script>

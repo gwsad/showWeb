@@ -2,54 +2,53 @@
   <div class="coupons">
     <img class="coupons__bg" :src="orderBg" alt="">
     <div class="coupons__tab">
-      <div class="coupons__tab__item" v-for="(item,index) in tabList" :key="index" @click="onChoseTab(item.value)">
-        <div :class="{ 'tab-chose': tab === item.value }">{{ zhTransform(item.name) }}</div>
-        <img v-if="tab === item.value" :src="tabChose" alt="">
+      <div class="coupons__tab__item" v-for="(item,index) in tabList" :key="index" @click="onChoseTab(item.order,item._id)">
+        <div :class="{ 'tab-chose': tab === item.order }">{{ zhTransform(item.name) }}</div>
+        <img v-if="tab === item.order" :src="tabChose" alt="">
       </div>
     </div>
     <div class="coupons__title">
       <div>
         <img :src="hot" alt="">
-        <span>{{ zhTransform(tabList[tab].name) }}</span>
+        <span>{{ zhTransform('话费') }}</span>
       </div>
-      <span>{{ zhTransform(`高价回收${tabList[tab].name}卡`) }}</span>
+      <span>{{ zhTransform(`高价回收${'话费'}卡`) }}</span>
     </div>
     <div class="coupons__content">
-      <div class="coupons__content__item" v-for="(item,index) in cardList" :key="index">
-        <img src="" alt="">
-        <div>{{ item.title }}</div>
-        <div class="coupons__content__item__discount">{{ item.discount }}</div>
-      </div>
+      <CardList :list="cardList" @onChoseCard="onChoseCard" />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import {ref} from "vue";
+import {ref,onMounted} from "vue";
+import { useRouter } from "vue-router"
 import {zhTransform}  from '@/utils'
 import orderBg from '@/assets/order-bg.png'
 import tabChose from '@/assets/table-chose.png'
 import hot from '@/assets/home-hot.png'
-
-const tabList = ref([
-  { name: '话费', value: 0 },
-  { name: '游戏', value: 1 },
-  { name: '加油', value: 2 },
-  { name: '电商', value: 3 }
-])
-const cardList = ref([
-  {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-  {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-  {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-  {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-  {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-  {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-  {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-  {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')}
-])
-const tab = ref(0)
-const onChoseTab = (value: number) => {
+import CardList from '@/components/cardList.vue'
+import { getCouponInfo } from '@/api/home'
+import { useCouponCatHook } from '@/store/modules/card'
+const router = useRouter()
+onMounted(async () => {
+  tabList.value = useCouponCatHook().couponCat
+  getTabData(tabList.value[0]._id)
+})
+const tabList = ref([])
+const cardList = ref([])
+const tab = ref(1)
+const onChoseTab = (value: number,id) => {
   tab.value = value
+  getTabData(id)
 }
+const onChoseCard = (card: any) => {
+  router.push({path: '/couponsSell', query: {card}})
+}
+const getTabData = async (id: string) => {
+  const _list = await getCouponInfo(id)
+  cardList.value = _list.data
+}
+
 </script>
 <style lang="scss" scoped>
 .coupons{
@@ -120,6 +119,7 @@ const onChoseTab = (value: number) => {
     display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
+    text-align: center;
     .coupons__content__item{
       width: 21rem;
       height: 27.7rem;

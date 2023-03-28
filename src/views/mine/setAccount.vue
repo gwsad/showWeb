@@ -3,7 +3,7 @@
     <div class="setAccount__head">
       <div class="setAccount__head__top">
         <div>
-          <div>{{ zhTransform(`昵称：${'用户asd'}`) }}</div>
+          <div>{{ zhTransform(`昵称：${userInfo.nickname === undefined ? '' : userInfo.nickname}`) }}</div>
           <div>{{ zhTransform('您已登录港回收系统平台，可在平台进行寄卖卡券，进行账户提现等功能') }}</div>
         </div>
         <img :src="logo" alt="">
@@ -22,20 +22,26 @@
   </div>
 </template>
 <script lang="ts" setup>
-import {ref} from "vue";
-import { showConfirmDialog } from 'vant'
+import {ref,computed} from "vue";
+import { showConfirmDialog,showToast } from 'vant'
 import {zhTransform}  from '@/utils'
 import { useRouter } from "vue-router"
+import { useUserStoreHook } from '@/store/modules/user'
 import logo from '../../assets/project-logo.png'
 import more from '../../assets/project-more.png'
+import { removeToken } from "@/utils/auth";
+import { logout } from '@/api/home'
 const router = useRouter()
+const userInfo = computed(() => {
+  return useUserStoreHook().userInfo || {};
+});
 const countList = ref([
   {title: '昵称修改', count: '',isShowMore: true},
   // {title: '实名认证', count: '',isShowMore: true},
   {title: '提现账号', count: '',isShowMore: true},
   {title: '交易密码', count: '修改交易密码',isShowMore: true},
-  {title: '手机号码', count: '18516103658',isShowMore: false},
-  {title: '注册时间', count: '',isShowMore: false},
+  {title: '手机号码', count: userInfo.value.phone,isShowMore: false},
+  {title: '注册时间', count: userInfo.value.updatedAt,isShowMore: false},
   {title: '退出登录', count: '',isShowMore: true},
   {title: '注销账号', count: '',isShowMore: true},
 ])
@@ -58,15 +64,21 @@ const onPage = (title: string) => {
         title: '退出登录',
         message:'确认退出程序！',})
       .then(() => {
-        console.log('confirm')
+        removeToken()
+        router.push('/login')
       })
       break;
     case '注销账号':
       showConfirmDialog({
         title: '注销账号',
         message:'确认注销程序！',})
-      .then(() => {
-        console.log('confirm')
+      .then(async() => {
+        const res = await logout()
+        if(res.code === 200){
+          showToast('注销成功')
+          removeToken()
+          router.push('/login')
+        }
       })
       break;
     default:

@@ -1,9 +1,9 @@
 <template>
   <div class="card">
-    <div class="card__content" v-for="(item,index) in list" :key="index" @click="onChoseCard(item.id)">
-      <img src="" alt="">
-      <div>{{ zhTransform(item.title) }}</div>
-      <div class="card__content__discount">{{ zhTransform(item.discount) }}</div>
+    <div class="card__content" v-for="(item,index) in list" :key="index" @click="onChoseCard(item)">
+      <img :src="item.image" alt="">
+      <div>{{ zhTransform(item.name) }}</div>
+      <div class="card__content__discount">{{ zhTransform(item.discount + '折收') }}</div>
     </div>
   </div>
 </template>
@@ -17,8 +17,8 @@ const props = defineProps({
     default: () => ([])
   }
 })
-const onChoseCard = (id: string) => {
-  emit('onChoseCard', id)
+const onChoseCard = (data) => {
+  emit('onChoseCard',data)
 }
 </script>
 <style lang="scss" scoped>

@@ -7,14 +7,14 @@
         <img v-if="tab === item.value" :src="tabChose" alt="">
       </div>
     </div>
-    <div class="orderList__body">
+    <div class="orderList__body" v-if="cardList.length !== 0">
       <div class="orderList__body__item" v-for="(item,index) in cardList" :key="index">
         <div class="orderList__body__item__info">
-          <div>{{ zhTransform(item.title) }}</div>
-          <div>{{ zhTransform(item.time) }}</div>
+          <div>{{ zhTransform(item.cardName) }}</div>
+          <div>{{ zhTransform(item.updatedAt) }}</div>
         </div>
         <div class="orderList__body__item__desc">
-          <div>{{ item.price }}</div>
+          <div>{{ zhTransform('HK$' + ( item.facevalue * ( item.discount / 100 ) * item.cardInfos.length )) }}</div>
           <div class="orderList__body__item__desc__common" :class="{'orderList__body__item__desc__finished': item.status !== 1}">{{ zhTransform(item.status === 1 ? '处理中' : '已完成') }}</div>
         </div>
       </div>
@@ -22,26 +22,38 @@
   </div>
 </template>
 <script lang="ts" setup>
-import {ref} from "vue";
+import {ref,onBeforeMount} from "vue";
 import {zhTransform}  from '@/utils'
 import orderBg from '@/assets/order-bg.png'
 import tabChose from '@/assets/table-chose.png'
+import { getOrderList } from '@/api/home'
 
 const tabList = ref([
   { name: '全部订单', value: 0 },
   { name: '正在处理', value: 1 },
   { name: '处理完成', value: 2 }
 ])
-const cardList = ref([
-  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 0,price: 'HK$ 80.00'},
-  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 0,price: 'HK$ 80.00'},
-  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 0,price: 'HK$ 80.00'},
-  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 0,price: 'HK$ 80.00'}
-])
+const cardList = ref([])
 const tab = ref(0)
 const onChoseTab = (value: number) => {
   tab.value = value
+  getOrderListFn()
 }
+
+onBeforeMount(()=>{
+  getOrderListFn()
+})
+
+// 获取订单列表
+const getOrderListFn = async () => {
+  try {
+    const res = await getOrderList(tab.value)
+    cardList.value = res.data
+  } catch (error) {
+    return false
+  }
+}
+
 </script>
 <style lang="scss" scoped>
 .orderList{

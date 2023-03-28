@@ -6,7 +6,7 @@
         <div class="flex">
           <img class="mine__info-head__logo" :src="logo" alt="">
           <div class="mine__info-head__info">
-            <div>{{ zhTransform('123') }}</div>
+            <div>{{ zhTransform(userInfo.nickname === undefined ? '' : userInfo.nickname) }}</div>
             <div>{{ zhTransform('专业的卡劵寄售平台') }}</div>
           </div>
         </div>
@@ -22,7 +22,7 @@
       <div class="mine__account__info flex">
         <img :src="saveMoney" alt="">
         <span>{{ zhTransform('账户金额：') }}</span>
-        <span class="mine__account__info-special">100.00</span>
+        <span class="mine__account__info-special">{{ getCash }}</span>
       </div>
       <div class="mine__account__withdraw flex-space">
         <span>{{ zhTransform('我要提现') }}</span>
@@ -48,7 +48,7 @@
   </div>
 </template>
 <script lang="ts" >
-import {defineComponent, ref} from "vue";
+import {defineComponent, ref,computed} from "vue";
 import {zhTransform}  from '@/utils'
 import { useRouter } from "vue-router"
 import mineBg from '../../assets/mine-bg.png'
@@ -59,12 +59,16 @@ import withdraw from '../../assets/mine/mine-withdraw.png'
 import withdrawRecord from '../../assets/mine/mine-withdraw-record.png'
 import saveMoney from '../../assets/mine/mine-save-money.png'
 import more from '../../assets/project-more.png'
-
+import { useUserStoreHook } from '@/store/modules/user'
 export default defineComponent({
-  components: {
-
-  },
   setup() {
+    /** 用户名 */
+    const userInfo = computed(() => {
+      return useUserStoreHook().userInfo || {};
+    });
+    const getCash = computed(() => {
+      return (userInfo.value?.cash?.deal + userInfo.value?.cash?.extend) || 0
+    })
     const router = useRouter()
     const hearList = ref([
       {url: sell, title: zhTransform('我要卖卡')},
@@ -140,6 +144,8 @@ export default defineComponent({
       more,
       settingList,
       moreList,
+      userInfo,
+      getCash,
       zhTransform,
       onSetGo,
       onMorePage,

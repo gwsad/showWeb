@@ -1,20 +1,42 @@
 <template>
   <div class="share__code">
     <Image :src="shareBg" alt="" width="100%" height="100%" />
-    <div class="share__code__num">{{ zhTransform(`-目前已经有10000人获得奖励-`) }}</div>
+    <div class="share__code__num">{{ zhTransform(`-目前已经有${inviteNum}人获得奖励-`) }}</div>
     <div class="share__code__body">
       <p>{{ zhTransform(`我的邀请码`) }}</p>
-      <span>{{ zhTransform('6666') }}</span>
-      <div>{{ zhTransform(`保存邀请码`) }}</div>
+      <span>{{ zhTransform(userInfo.invitationCode) }}</span>
+      <div @click="copyUrl(userInfo.invitationCode)">{{ zhTransform(`保存邀请码`) }}</div>
       <div>{{ zhTransform(`分享链接给朋友`) }}</div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import {ref} from "vue";
+import {ref,computed,onMounted} from "vue";
 import {zhTransform}  from '@/utils'
-import { Image } from 'vant';
+import { Image,showToast } from 'vant';
 import shareBg from '@/assets/share-code-bg.png'
+import { useUserStoreHook } from '@/store/modules/user'
+import { getInviteNum } from '@/api/home'
+const userInfo = computed(() => {
+  return useUserStoreHook().userInfo || {};
+});
+onMounted(() => {
+  getInviteNum().then((res:any) => {
+    inviteNum.value = res.data.count
+  })
+})
+const inviteNum = ref(0)
+const copyUrl = (value)=> {
+   let url = value;
+   let domInput = document.createElement('input');
+   domInput.value = url;
+   document.body.appendChild(domInput);  // 添加input节点
+   domInput.select(); // 选择对象;
+   document.execCommand("Copy"); // 执行浏览器复制命令
+   domInput.remove()
+   showToast({ message: zhTransform('复制成功'), duration: 2000 })
+
+}
 </script>
 <style lang="scss" >
 .share__code{

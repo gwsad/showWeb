@@ -51,7 +51,9 @@
     "types/*.d.ts",
     "vite.config.ts",
     "src/views/example/config/table.ts",
-    "*.d.ts"
+    "*.d.ts",
+    "src/utils/ajax.js",
+    "src/utils/ajax.js"
   ],
   "exclude": [
     "node_modules",

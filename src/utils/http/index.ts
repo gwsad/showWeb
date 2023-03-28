@@ -8,7 +8,9 @@ import {
   RequestMethods,
   PureHttpResponse,
   PureHttpRequestConfig
-} from "./types";
+} from "./types.d";
+import { getToken } from "@/utils/auth";
+import { showToast } from 'vant';
 import { stringify } from "qs";
 // import { formatToken } from "@/utils/auth";
 const { VITE_GLOB_API_URL } = import.meta.env;
@@ -19,8 +21,7 @@ const defaultConfig: AxiosRequestConfig = {
   timeout: 10000,
   headers: {
     Accept: "application/json, text/plain, */*",
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest"
+    "Content-Type": "application/json"
   },
   // 数组格式参数序列化（https://github.com/axios/axios/issues/5142）
   paramsSerializer: {
@@ -68,6 +69,10 @@ class PureHttp {
           return config;
         }
         /** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
+        // 添加默认token
+        const token = getToken();
+        token && (config.headers["Authorization"] = "Bearer " + token)
+
         const whiteList = ["/refreshToken", "/login"];
         // 定义请求链接
         config.url = `${VITE_GLOB_API_URL}${config.url}`;
@@ -101,6 +106,7 @@ class PureHttp {
         return response.data;
       },
       (error: PureHttpError) => {
+        // showToast('服务器错误')
         const $error = error;
         $error.isCancelRequest = Axios.isCancel($error);
         // 所有的响应异常 区分来源为取消请求/非取消请求

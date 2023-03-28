@@ -8,10 +8,10 @@
     <div class="home__tips">
       <span>{{ zhTransform('订单提醒：') }}</span>
       <van-swipe style="height: 17px" vertical :autoplay="2000" :duration="800" :show-indicators="false">
-        <van-swipe-item v-for="(item,index) in messageList" :key="index">{{item.text}}</van-swipe-item>
+        <van-swipe-item v-for="(item,index) in messageList" :key="index">{{ zhTransform(item.time + ' ' + item.text)}}</van-swipe-item>
       </van-swipe>
     </div>
-    <kind @onChoseKind="onChoseKind" />
+    <kind />
     <div class="home__transform">
       <img :src="transform" alt="">
     </div>
@@ -35,7 +35,7 @@ import {zhTransform}  from '@/utils'
 import transform from '../../assets/home-transform.png'
 import homeBanner from '../../assets/home-banner.png'
 import homeHot from '../../assets/home-hot.png'
-import { getHomeMessage } from '@/api/home'
+import { getHomeMessage,getHotCoupon } from '@/api/home'
 export default defineComponent({
   components: {
     [Swipe.name]: Swipe,
@@ -45,32 +45,26 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter()
-    const messageList = ref([
-      {time: '2023-11-11',text: zhTransform('您有一笔订单已经完成，请及时查看大街上打底裤和大家阿克索德好看')},
-      {time: '2023-11-11',text: zhTransform('您有二笔订单已经完成，请及时查看')}
-    ])
-    const cardList = ref([
-      {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-      {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-      {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-      {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-      {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-      {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-      {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')},
-      {imgUrl: '', title: zhTransform('电商卡'), discount: zhTransform('9.5折')}
-    ])
+    const messageList = ref([])
+    const cardList = ref([])
     const onChoseKind = (kind: string) => {
       router.push({path: '/couponsSell', query: {kind}})
     }
     const onChoseCard = (card: any) => {
-      router.push({path: '/couponsSell', query: {card}})
+      console.log(card)
+      router.push({path: '/couponsSell', query: {card:card._id}})
     }
 
     onMounted(async ()=>{
-      let res = await getHomeMessage()
-      console.log('res',res)
+      try {
+        let res:any = await getHomeMessage()
+        messageList.value = res.data
+        let hot:any = await getHotCoupon()
+        cardList.value = hot.data
+      } catch (error) {
+        console.log(error)
+      }
     })
-
     return {
       messageList,
       transform,
@@ -86,6 +80,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .home{
+  min-height: 100vh;
   text-align: center;
   .home__head{
     width: 100vh;

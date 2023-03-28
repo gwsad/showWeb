@@ -4,7 +4,7 @@
     <div class="withdraw__body">
       <p>{{ zhTransform('可提现金额') }}</p>
       <p class="withdraw__cash">{{ zhTransform('0.00') }}</p>
-      <div class="withdraw__detail">
+      <div class="withdraw__detail" @click="onDetail">
         <div>{{ zhTransform('推广收益 +0.00 明细') }}</div>
         <img :src="more" alt="">
       </div>
@@ -16,21 +16,21 @@
         </div>
         <div class="withdraw__money__item">
           <field :placeholder="zhTransform('请输入交易密码')" />
-          <p class="withdraw__money__item__two">{{ zhTransform('忘记密码？') }}</p>
+          <p class="withdraw__money__item__two" @click="forgetPass">{{ zhTransform('忘记密码？') }}</p>
         </div>
       </div>
       <div class="easy__page withdraw__option">
         <div class="withdraw__option__title">{{ zhTransform('选择到账方式') }}</div>
         <!-- USDT -->
-        <div class="withdraw__option__item withdraw__option__USDT" @click="onChoseType(0)">
+        <!-- <div class="withdraw__option__item withdraw__option__USDT" @click="onChoseType(0)">
           <div class="withdraw__option__item__usdt">
             <img :src="USDT" alt="">
             <span>{{ zhTransform('USDT') }}</span>
           </div>
           <choseIcon :value="choseType === 0" />
-        </div>
+        </div> -->
         <!-- 银行卡 -->
-        <div class="withdraw__option__item withdraw__option__Bank" @click="onChoseType(1)">
+        <!-- <div class="withdraw__option__item withdraw__option__Bank" @click="onChoseType(1)">
           <div class="withdraw__option__item__usdt">
             <img class="withdraw__option__item__bank__img" :src="Bank" alt="">
             <div v-if="true" class="withdraw__option__item__bank">
@@ -40,7 +40,11 @@
           </div>
           <choseIcon :value="choseType === 1" />
         </div>
-        <div class="withdraw__option__btn" @click="onAddBank(true)">{{ zhTransform('+添加银行卡') }}</div>
+        <div class="withdraw__option__btn" @click="onAddBank(true)">{{ zhTransform(`+添加${choseType === 0 ? 'USDT': '银行卡'}`) }}</div> -->
+        <div class="withdraw__option__chose" @click="onChoseType">
+          <div>{{ zhTransform('请选择') }}</div>
+          <img class="withdraw__option__chose__more" :src="more" alt="">
+        </div>
       </div>
       <div class="easy__page withdraw__tips">
         <p v-for="(item,index) in tipsList" :key="index">{{ zhTransform(item) }}</p>
@@ -56,12 +60,14 @@
 import {ref} from "vue";
 import {zhTransform}  from '@/utils'
 import {Field} from 'vant'
+import { useRouter } from "vue-router";
 import choseIcon from '@/components/choseIcon.vue'
 import withdrawBg from '@/assets/withdraw-bg.png'
 import more from '@/assets/project-more.png'
 import USDT from '@/assets/USDT.png'
 import Bank from '@/assets/bank.png'
 import AddBank from '@/components/addBank.vue'
+const router = useRouter()
 const choseType = ref(0)
 const addOpen = ref(false)
 const tipsList = ref([
@@ -69,18 +75,31 @@ const tipsList = ref([
   '*单卡每日限额20000.00元',
   '*同一用户单日首飞次数限制10次，超过显示提现失败，第二天可继续提现'
 ])
-const onChoseType = (type: number) => {
-  choseType.value = type
-}
-const onAddBank = (type: boolean) => {
-  addOpen.value = type
-}
+// const onChoseType = (type: number) => {
+//   choseType.value = type
+// }
+// const onAddBank = (type: boolean) => {
+//   addOpen.value = type
+// }
 const onConfirm = (data:any) => {
   console.log(data)
   addOpen.value = false
 }
 const onCancel = () => {
   addOpen.value = false
+}
+// 查看收益明细
+const onDetail = () => {
+  router.push('/promotionDetails')
+}
+
+// 选择到账方式
+const onChoseType = () => {
+  router.push('/accountOption')
+}
+// 忘记密码
+const forgetPass = () => {
+  router.push('/setPassword')
 }
 </script>
 <style lang="scss" >
@@ -224,6 +243,18 @@ const onCancel = () => {
       margin-left: 1rem;
       box-sizing: border-box;
 
+    }
+    .withdraw__option__chose{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &>div{
+        color: #233762;
+      }
+      .withdraw__option__chose__more{
+        width: 3.2rem;
+        height: 3.2rem;
+      }
     }
   .withdraw__tips{
     margin-top: 2.4rem;
