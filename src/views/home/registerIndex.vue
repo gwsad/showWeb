@@ -32,7 +32,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import {ref} from "vue";
+import {ref,onBeforeMount,unref} from "vue";
 import {zhTransform}  from '@/utils'
 import { setToken } from "@/utils/auth";
 import logo from '@/assets/project-logo.png'
@@ -43,6 +43,8 @@ import { create } from '@/api/home'
 import { useUserStoreHook } from "@/store/modules/user";
 const show = ref(false)
 const showBtn = ref(true)
+const { currentRoute } = useRouter();
+const { query } = unref(currentRoute);
 const loginInfo = ref({
   phone: '',
   invitationCode: '',
@@ -63,6 +65,12 @@ const onSelect = (action: any) => {
   choseAddress.value = action.name
   onClose()
 }
+onBeforeMount(() => {
+  console.log(query)
+  if( query.shareCode ){
+    loginInfo.value.invitationCode = query.shareCode
+  }
+})
 const onLogin = async() => {
   if(!loginInfo.value.phone){
     return showToast({
@@ -133,6 +141,7 @@ const onLogin = async() => {
   background: #f8fbff;
   min-height: 100vh;
   padding: 6rem 3rem;
+  box-sizing: border-box;
   .register__head{
     display: flex;
     align-items: center;
