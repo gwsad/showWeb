@@ -2,10 +2,10 @@
   <div class="add__Bank">
     <Dialog v-model:show="props.show"  :showCancelButton="true" class="showExample" @cancel="onResult(false)" @confirm="onResult(true)" >
       <div class="add__Bank__title">{{ zhTransform('添加银行卡') }}</div>
-      <div class="add__Bank__desc">{{ zhTransform('只能填写[xxx]的银行卡账号') }}</div>
-      <div class="add__Bank__picker" @click="onOpenPicker()">{{ zhTransform(columns[valuePicker] === undefined ? '请选择' : columns[valuePicker].text) }}</div>
+      <div class="add__Bank__desc">{{ zhTransform('只能填写银行卡账号') }}</div>
+      <div class="add__Bank__picker" @click="onOpenPicker()">{{ zhTransform(columns[valuePicker] === undefined ? '请选择' : columns[valuePicker].name) }}</div>
       <div class="add__Bank__chose" :class="{ 'add__Bank__chose-show': !pickerShow }" >
-        <div v-for="(item,index) in columns" :key="index" @click="onChoseBank(item.value)">{{ zhTransform(item.text) }}</div>
+        <div v-for="(item,index) in columns" :key="index" @click="onChoseBank(index)">{{ zhTransform(item.name) }}</div>
       </div>
       <Field v-model="bankInfo.userName" placeholder="请输入持卡人姓名" />
       <Field v-model="bankInfo.bankName" placeholder="请输入银行卡卡号" />
@@ -17,6 +17,7 @@
 import {defineProps,ref,defineEmits, onMounted} from "vue";
 import {Dialog,Field,showToast} from 'vant'
 import {zhTransform}  from '@/utils'
+import { getBankList } from '@/api/home'
 const props = defineProps(['show'])
 const emit = defineEmits(['onCancel','onConfirm'])
 const pickerShow = ref(props.show)
@@ -26,17 +27,7 @@ const bankInfo = ref({
   bankNum: '',
 })
 const valuePicker = ref(null)
-const columns = ref([
-  { text: '中国银行', value: 0, },
-  { text: '农业银行', value: 1, },
-  { text: '工商银行', value: 2, },
-  { text: '南京银行', value: 3, },
-  { text: '宁波银行', value: 4, },
-  { text: '华夏银行', value: 5, },
-  { text: '上海银行', value: 6, },
-  { text: '北京银行', value: 7, },
-  { text: '农商银行', value: 8, },
-])
+const columns = ref([])
 const onOpenPicker = () => {
   pickerShow.value = true
 }
@@ -45,7 +36,7 @@ const onResult = (value: boolean) => {
   if( value && (!bankInfo.value.userName || !bankInfo.value.bankName || !bankInfo.value.bankNum || valuePicker.value === null)){
     return showToast('请填写完整信息')
   }
-  value && emit('onConfirm',Object.assign(bankInfo.value,{bankType: valuePicker.value}))
+  value && emit('onConfirm',Object.assign(bankInfo.value,{bankType:columns.value[valuePicker.value].name}))
   !value && emit('onCancel')
   valuePicker.value = null
   bankInfo.value = {
@@ -58,8 +49,9 @@ const onChoseBank = (value: number) => {
   valuePicker.value = value
   pickerShow.value = false
 }
-onMounted(() => {
-  console.log(props.show)
+onMounted(async()=>{
+  let res:any = await getBankList()
+  columns.value = res.data
 })
 </script>
 <style lang="scss">

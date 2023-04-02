@@ -65,7 +65,7 @@ const onPage = (title: string) => {
         message:'确认退出程序！',})
       .then(() => {
         removeToken()
-        router.push('/login')
+        router.push('/register')
       })
       break;
     case '注销账号':
@@ -77,7 +77,7 @@ const onPage = (title: string) => {
         if(res.code === 200){
           showToast('注销成功')
           removeToken()
-          router.push('/login')
+          router.push('/register')
         }
       })
       break;

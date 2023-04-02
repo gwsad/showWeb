@@ -3,46 +3,38 @@
     <img class="withdraw__bg" :src="withdrawBg" alt="">
     <div class="withdraw__body">
       <p>{{ zhTransform('可提现金额') }}</p>
-      <p class="withdraw__cash">{{ zhTransform('0.00') }}</p>
+      <p class="withdraw__cash">{{ zhTransform(userInfo.cash.extend.total + '')}}</p>
       <div class="withdraw__detail" @click="onDetail">
-        <div>{{ zhTransform('推广收益 +0.00 明细') }}</div>
+        <div>{{ zhTransform(`推广收益 +${(userInfo.cashTotal / 100).toFixed(2)} 明细`) }}</div>
         <img :src="more" alt="">
       </div>
       <div class="withdraw__money easy__page">
         <div class="withdraw__money__title">{{ zhTransform('提现金额(HK$)') }}</div>
         <div class="withdraw__money__item">
-          <field />
-          <div class="withdraw__money__item__one">{{ zhTransform('全部提现') }}</div>
+          <field placeholder="0.00" v-model="withdrawInfo.cashMoney" />
+          <div class="withdraw__money__item__one" @click="onCash">{{ zhTransform('全部提现') }}</div>
         </div>
-        <div class="withdraw__money__item">
-          <field :placeholder="zhTransform('请输入交易密码')" />
+        <!-- <div class="withdraw__money__item">
+          <field :placeholder="zhTransform('请输入交易密码')" v-model="withdrawInfo.pass" />
           <p class="withdraw__money__item__two" @click="forgetPass">{{ zhTransform('忘记密码？') }}</p>
-        </div>
+        </div> -->
       </div>
       <div class="easy__page withdraw__option">
         <div class="withdraw__option__title">{{ zhTransform('选择到账方式') }}</div>
-        <!-- USDT -->
-        <!-- <div class="withdraw__option__item withdraw__option__USDT" @click="onChoseType(0)">
+        <div v-if="cashInfo.type === null" class="withdraw__option__chose" @click="onChoseType">
+          <div>{{ zhTransform('请选择') }}</div>
+          <img class="withdraw__option__chose__more" :src="more" alt="">
+        </div>
+        <div v-else class="withdraw__option__item withdraw__option__USDT" @click="onChoseType(0)">
           <div class="withdraw__option__item__usdt">
-            <img :src="USDT" alt="">
-            <span>{{ zhTransform('USDT') }}</span>
-          </div>
-          <choseIcon :value="choseType === 0" />
-        </div> -->
-        <!-- 银行卡 -->
-        <!-- <div class="withdraw__option__item withdraw__option__Bank" @click="onChoseType(1)">
-          <div class="withdraw__option__item__usdt">
-            <img class="withdraw__option__item__bank__img" :src="Bank" alt="">
-            <div v-if="true" class="withdraw__option__item__bank">
-              <div>{{ zhTransform('银行卡') }}<span class="withdraw__option__item__bank-tips">{{ zhTransform('请先设置提款银行卡') }}</span></div>
-              <div>{{ zhTransform('单笔5000元，每日限额2万元(实时到账)') }}</div>
+            <img v-show="cashInfo.type === 'USDT'" :src="USDT" alt="">
+            <img v-show="cashInfo.type === '银行卡'" :src="Bank" alt="">
+            <img v-show="cashInfo.type === '支付宝'" :src="ZFB" alt="">
+            <div>
+              <div>{{ zhTransform( cashInfo.name || cashInfo.card || cashInfo.accountName ) }}</div>
+              <div>{{ zhTransform( cashInfo.address || cashInfo.bank || cashInfo.account ) }}</div>
             </div>
           </div>
-          <choseIcon :value="choseType === 1" />
-        </div>
-        <div class="withdraw__option__btn" @click="onAddBank(true)">{{ zhTransform(`+添加${choseType === 0 ? 'USDT': '银行卡'}`) }}</div> -->
-        <div class="withdraw__option__chose" @click="onChoseType">
-          <div>{{ zhTransform('请选择') }}</div>
           <img class="withdraw__option__chose__more" :src="more" alt="">
         </div>
       </div>
@@ -50,43 +42,83 @@
         <p v-for="(item,index) in tipsList" :key="index">{{ zhTransform(item) }}</p>
       </div>
     </div>
-    <AddBank :show="addOpen" @onConfirm="onConfirm" @onCancel="onCancel" />
     <div class="common-btn">
-      <div>{{ zhTransform('立即提现') }}</div>
+      <div @click="onConfirm">{{ zhTransform('立即提现') }}</div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import {ref} from "vue";
+import {ref,computed,onMounted,onUnmounted} from "vue";
 import {zhTransform}  from '@/utils'
-import {Field} from 'vant'
+import {Field,showToast} from 'vant'
 import { useRouter } from "vue-router";
-import choseIcon from '@/components/choseIcon.vue'
 import withdrawBg from '@/assets/withdraw-bg.png'
 import more from '@/assets/project-more.png'
 import USDT from '@/assets/USDT.png'
 import Bank from '@/assets/bank.png'
-import AddBank from '@/components/addBank.vue'
+import ZFB from '@/assets/ZFB.png'
+import { useUserStoreHook } from '@/store/modules/user'
+import { withdraw } from '@/api/home'
 const router = useRouter()
-const choseType = ref(0)
-const addOpen = ref(false)
+const userInfo = computed(() => {
+  return useUserStoreHook().userInfo || {};
+});
+const cashInfo = computed(() => {
+  return useUserStoreHook().cashInfo || {};
+})
+
+// 提现信息
+const withdrawInfo = ref({cashMoney: null});
 const tipsList = ref([
   '*最低提现1.00元 单笔提现不能超过10000.00元',
   '*单卡每日限额20000.00元',
   '*同一用户单日首飞次数限制10次，超过显示提现失败，第二天可继续提现'
 ])
-// const onChoseType = (type: number) => {
-//   choseType.value = type
-// }
-// const onAddBank = (type: boolean) => {
-//   addOpen.value = type
-// }
-const onConfirm = (data:any) => {
-  console.log(data)
-  addOpen.value = false
+onMounted(() => {
+  withdrawInfo.value.cashMoney = JSON.parse(window.localStorage.getItem('cash') || 'null')
+})
+onUnmounted(() => {
+  window.localStorage.setItem('cash',JSON.stringify(null))
+  useUserStoreHook().setCashInfo({type:null})
+})
+
+// 全部提现
+const onCash = () => {
+  withdrawInfo.value.cashMoney = userInfo.value.cashTotal
 }
-const onCancel = () => {
-  addOpen.value = false
+
+const onConfirm = async() => {
+  let _cashInfo:any = JSON.parse(JSON.stringify(cashInfo.value))
+  if( !withdrawInfo.value.cashMoney ){
+    return showToast('请输入提现金额')
+  }
+  if( _cashInfo.type === null ){
+    return showToast('请选择到账方式')
+  }
+  if( Number(withdrawInfo.value.cashMoney) < 1 ){
+    return showToast('提现金额不能大于可提现金额')
+  }
+  if( Number(withdrawInfo.value.cashMoney) > userInfo.value.cashTotal ){
+    return showToast('提现金额不能大于可提现金额')
+  }
+  try {
+    let _data = {cash: Number(withdrawInfo.value.cashMoney)}
+    _data = _cashInfo.type === 'USDT' ? Object.assign(_data,{accountInfo:{usdt: _cashInfo}}) : _cashInfo.type === '银行卡' ? Object.assign(_data,{accountInfo:{bank: _cashInfo}}) : Object.assign(_data,{accountInfo: {alipay: _cashInfo}});
+    const _res = JSON.parse(JSON.stringify(_data))
+    console.log('_res',_res)
+    _cashInfo.type === 'USDT' && delete _res.accountInfo.usdt.type
+    _cashInfo.type === '银行卡' && delete _res.accountInfo.bank.type
+    _cashInfo.type === '支付宝' && delete _res.accountInfo.alipay.type
+    await withdraw(_res)
+    showToast('提现成功')
+    withdrawInfo.value.cashMoney = null
+    window.localStorage.setItem('cash',JSON.stringify(null))
+    useUserStoreHook().setCashInfo({type:null})
+    router.go(-1)
+  } catch (error) {
+    console.log(error)
+    return false
+  }
 }
 // 查看收益明细
 const onDetail = () => {
@@ -96,6 +128,7 @@ const onDetail = () => {
 // 选择到账方式
 const onChoseType = () => {
   router.push('/accountOption')
+  window.localStorage.setItem('cash',JSON.stringify(withdrawInfo.value.cashMoney))
 }
 // 忘记密码
 const forgetPass = () => {
@@ -251,10 +284,7 @@ const forgetPass = () => {
       &>div{
         color: #233762;
       }
-      .withdraw__option__chose__more{
-        width: 3.2rem;
-        height: 3.2rem;
-      }
+
     }
   .withdraw__tips{
     margin-top: 2.4rem;
@@ -267,6 +297,10 @@ const forgetPass = () => {
   }
   .van-field{
     padding: 0;
+  }
+  .withdraw__option__chose__more{
+    width: 3.2rem;
+    height: 3.2rem;
   }
 }
 </style>

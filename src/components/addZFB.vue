@@ -2,8 +2,8 @@
   <div class="add__Bank">
     <Dialog v-model:show="props.show"  :showCancelButton="true" class="showExample" @cancel="onResult(false)" @confirm="onResult(true)" >
       <div class="add__Bank__title">{{ zhTransform('添加支付宝账户') }}</div>
-      <Field v-model="ZFBInfo.ZFBAccount" placeholder="请输入支付宝账户" />
       <Field v-model="ZFBInfo.ZFBName" placeholder="请输入支付宝姓名" />
+      <Field v-model="ZFBInfo.ZFBAccount" placeholder="请输入支付宝账户" />
     </Dialog>
   </div>
 </template>

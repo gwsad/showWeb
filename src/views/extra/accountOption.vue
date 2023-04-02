@@ -7,13 +7,20 @@
       </div>
     </div>
     <div class="option__body">
-      <div class="option__body__item" v-for="(item,index) in accountList" :key="index" @click="onChoseAccount(index)">
-        <div>{{ zhTransform(item.name) }}</div>
-        <div>{{ item.value }}</div>
+      <div class="option__body__item" v-for="(item,index) in accountList" :key="item.name + item.value" @click.stop="onChoseIcon(index)" >
+        <div>
+          <div>{{ zhTransform(item.name + '') }}</div>
+          <div>{{ item.value }}</div>
+        </div>
+        <choseIcon :value="index === choseType"  />
       </div>
     </div>
-    <div class="common-btn" @click="onDialog(true)">
-      <div>{{ zhTransform('添加账户') }}</div>
+    <div v-show="choseType === null" class="common-btn">
+      <div @click="onDialog(true)">{{ zhTransform('添加账户') }}</div>
+    </div>
+    <div v-show="choseType !== null" class="common-btn special-btn">
+      <div @click.stop="onChoseAccount">{{ zhTransform('确认选择') }}</div>
+      <div @click.stop="onDelete">{{ zhTransform('删除') }}</div>
     </div>
     <AddUSDT :show="addOpen && tab === 1"  @onConfirm="onConfirmUsdt" @onCancel="onDialog(false)" />
     <AddBank :show="addOpen && tab === 2" @onConfirm="onConfirm" @onCancel="onDialog(false)" />
@@ -21,59 +28,135 @@
   </div>
 </template>
 <script lang="ts" setup>
-import {ref,onMounted} from "vue";
+import {ref,onMounted,computed} from "vue";
 import { useRouter } from "vue-router"
 import {zhTransform}  from '@/utils'
 import tabChose from '@/assets/table-chose.png'
 import choseIcon from '@/components/choseIcon.vue'
-import { getCouponInfo } from '@/api/home'
 import AddBank from '@/components/addBank.vue'
 import AddUSDT from '@/components/addUsdt.vue'
 import AddZFB from '@/components/addZFB.vue'
+import { addBank } from '@/api/home'
+import { useUserStoreHook, } from "@/store/modules/user";
 const router = useRouter()
 const tab = ref(1)
-const account = ref(null)
-const addOpen = ref(0) // 添加银行账户弹窗
+const addOpen = ref(false) // 添加银行账户弹窗
+const choseType = ref(null)
 const tabList = ref([
   {name: 'USDT账户',value:1},
   {name: '银行卡账户',value:2},
   {name: '支付宝账户',value:3}
 ])
-const accountList = ref([
-  {name: 'ERC20',value:1},
-  {name: 'TRC20',value:1},
-  {name: '中国银行',value:1},
-  {name: '台湾银行',value:1}
-])
+const accountList = ref([]) // 银行卡列表
+const storageList = ref({}) // 暂存提现账户数据
+// 初始化
+onMounted(async()=>{
+  getTabData()
+})
 const onChoseTab = (value: number,id) => {
   tab.value = value
-  account.value = null
+  getTabData()
 }
-const onChoseAccount = (index: number) => {
-  account.value = index
+// 确认选择账户
+const onChoseAccount = () => {
+  useUserStoreHook().setCashInfo(Object.assign(storageList.value[choseType.value],{type: tab.value === 1 ? 'USDT' : tab.value === 2 ? '银行卡' : '支付宝'}))
   router.go(-1)
+}
+// 删除账户
+const onDelete = () => {
+  tab.value === 1 && onConfirmUsdt(storageList.value[choseType.value],0)
+  tab.value === 2 && onConfirm(storageList.value[choseType.value],0)
+  tab.value === 3 && onConfirmZFB(storageList.value[choseType.value],0)
 }
 const onDialog = (value:boolean) => {
   addOpen.value = value
 }
 
+// 选择提现方式
+const onChoseIcon = (index: number) => {
+  if( choseType.value === index ){
+    choseType.value = null
+  }else{
+    choseType.value = index
+  }
+}
+
 // 添加银行卡
-const onConfirm = (value: any) => {
-  console.log(value)
+const onConfirm = async(value: any,status = 1) => {
+  const _data = {
+    card: value.bankName || value.card,
+    bank: value.bankType || value.bank,
+    username: value.userName || value.username,
+    openingBank: value.bankNum || value.openingBank,
+    status
+  }
+  try {
+    await addBank({bankCard:_data})
+    getTabData()
+    choseType.value = null
+  } catch (error) {
+    console.log(error)
+  }
   onDialog(false)
 }
 // 添加USDT
-const onConfirmUsdt = (value: any) => {
-  console.log(value)
+const onConfirmUsdt = async(value: any,status = 1) => {
+  const _data = {
+    name: value.type || value.name,
+    address: value.usdtNum || value.address,
+    status
+  }
+  try {
+    await addBank({usdt:_data})
+    getTabData()
+    choseType.value = null
+  } catch (error) {
+    console.log(error)
+  }
   onDialog(false)
 }
 // 添加支付宝
-const onConfirmZFB = (value: any) => {
-  console.log(value)
+const onConfirmZFB = async(value: any,status = 1) => {
+  const _data = {
+    account: value.ZFBAccount || value.account,
+    accountName: value.ZFBName || value.accountName,
+    status
+  }
+  try {
+    await addBank({aliPay:_data})
+    getTabData()
+    choseType.value = null
+  } catch (error) {
+    console.log(error)
+  }
   onDialog(false)
 }
-// const getTabData = async (id: string) => {
-// }
+
+// 获取列表数据
+const getTabData = async () => {
+  accountList.value = []
+  const res:any = await useUserStoreHook().handleGetUserInfo();
+  if( tab.value === 1 ){
+    storageList.value = res.cashAccount.usdt
+    res.cashAccount.usdt.map(item=>{
+      accountList.value.push({name: item.name,value: item.address})
+    })
+  }
+  if ( tab.value === 2 ){
+    storageList.value = res.cashAccount.bankCard
+    res.cashAccount.bankCard.map(item=>{
+      accountList.value.push({name: item.card,value: item.bank})
+    })
+  }
+  if(tab.value === 3){
+    storageList.value = res.cashAccount.aliPay
+    res.cashAccount.aliPay.map(item=>{
+      accountList.value.push({name: item.accountName,value: item.account})
+    })
+  }
+}
+
+
 
 </script>
 <style lang="scss" scoped>
@@ -119,12 +202,24 @@ const onConfirmZFB = (value: any) => {
       font-size: 2.4rem;
       color: #233762;
       line-height: 2.9rem;
+      display: flex;
+      justify-content: space-between;
       div:last-child{
         font-size: 2rem;
         line-height: 2.4rem;
         color: #7D8899;
         margin-top: 1.2rem;
       }
+    }
+  }
+  .special-btn{
+    justify-content: center;
+    div{
+      width: 45%;
+    }
+    div:last-child{
+      margin-left: 2rem;
+      background: red;
     }
   }
 }

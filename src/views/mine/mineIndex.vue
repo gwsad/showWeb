@@ -6,7 +6,12 @@
         <div class="flex">
           <img class="mine__info-head__logo" :src="logo" alt="">
           <div class="mine__info-head__info">
-            <div>{{ zhTransform(userInfo.nickname === undefined ? '' : userInfo.nickname) }}</div>
+            <div>
+              <span>{{ zhTransform(userInfo.nickname === undefined ? '' : userInfo.nickname) }}</span>
+              <img v-if="userInfo.userLevel === 0" :src="one" alt="">
+              <img v-if="userInfo?.userLevel === 1" :src="two" alt="">
+              <img v-if="userInfo?.userLevel === 2" :src="three" alt="">
+            </div>
             <div>{{ zhTransform('专业的卡劵寄售平台') }}</div>
           </div>
         </div>
@@ -24,7 +29,7 @@
         <span>{{ zhTransform('账户金额：') }}</span>
         <span class="mine__account__info-special">{{ getCash }}</span>
       </div>
-      <div class="mine__account__withdraw flex-space">
+      <div class="mine__account__withdraw flex-space" @click="onInfoHead(2)">
         <span>{{ zhTransform('我要提现') }}</span>
         <img :src="more" alt="">
       </div>
@@ -51,6 +56,9 @@
 import {defineComponent, ref,computed} from "vue";
 import {zhTransform}  from '@/utils'
 import { useRouter } from "vue-router"
+import one from '../../assets/ordinary.png'
+import two from '../../assets/intermediate.png'
+import three from '../../assets/advanced.png'
 import mineBg from '../../assets/mine-bg.png'
 import logo from '../../assets/project-logo.png'
 import sell from '../../assets/mine/mine-sell.png'
@@ -67,7 +75,7 @@ export default defineComponent({
       return useUserStoreHook().userInfo || {};
     });
     const getCash = computed(() => {
-      return (userInfo.value?.cash?.deal + userInfo.value?.cash?.extend) || 0
+      return userInfo.value?.cashTotal || 0
     })
     const router = useRouter()
     const hearList = ref([
@@ -146,6 +154,9 @@ export default defineComponent({
       moreList,
       userInfo,
       getCash,
+      one,
+      two,
+      three,
       zhTransform,
       onSetGo,
       onMorePage,
@@ -179,9 +190,17 @@ export default defineComponent({
         text-align: left;
         div:nth-of-type(1){
           font-size: 3rem;
+          display: flex;
+          align-items: center;
+          margin-bottom: 1rem;
         }
         div:nth-of-type(2){
           font-size: 2rem;
+        }
+        img{
+          width: 14rem;
+          height: 4rem;
+          margin-left: 1.2rem;
         }
       }
     }

@@ -52,25 +52,26 @@
       <div class="sell-evaluate__head">
         <div>
           <img :src="evaluate" alt="">
-          <span>{{ zhTransform(`用户评价(1544)`) }}</span>
+          <span>{{ zhTransform(`用户评价`) }}</span>
         </div>
-        <div>
+        <!-- <div>
           <span>{{ zhTransform('查看全部') }}</span>
           <img :src="more" alt="">
-        </div>
+        </div> -->
       </div>
-      <div class="sell-evaluate__content">
+      <div class="sell-evaluate__content" v-for="(item,index) in commentList" :key="index">
         <div class="sell-evaluate__content__head">
           <div>
             <img :src="logo" alt="">
-            <span>{{ zhTransform('用户昵称') }}</span>
+            <span>{{ zhTransform(item.nickname + '') }}</span>
           </div>
-          <span class="sell-evaluate__content__head__time">{{ zhTransform('3小时前') }}</span>
+          <span class="sell-evaluate__content__head__time">{{ zhTransform(item.time + '') }}</span>
         </div>
-        <div class="sell-evaluate__content__body">{{ zhTransform('1231231212') }}</div>
+        <div class="sell-evaluate__content__body">{{ zhTransform(item.text + '') }}</div>
         <div class="sell-evaluate__content__score">
           <div v-for="(item,index) in scoreList" :key="index">
             <span>{{ zhTransform(item.title) }}</span>
+            <img :src="score" alt="" v-for="(item,index) in 5" :key="index">
           </div>
         </div>
       </div>
@@ -120,13 +121,16 @@ import account from '@/assets/home-account.png'
 import password from '@/assets/home-password.png'
 import example from '@/assets/example-dialog.png'
 import cancel from '@/assets/cancel.png'
+import score from '@/assets/score.png'
 import kind from '@/components/kind.vue'
 import card from '@/components/cardList.vue'
 import face from '@/components/faceValue.vue'
-import { getCouponDetail,getCouponInfo,submitSell } from '@/api/home'
+import { useCouponCatHook } from '@/store/modules/card'
+import { getCouponDetail,getCouponInfo,submitSell,orderComment } from '@/api/home'
 const { currentRoute } = useRouter();
 const { query } = unref(currentRoute);
 const router = useRouter()
+const commentList = ref([])
 const show = ref(false)
 const illustrateStatus = ref(['0'])
 const sellList = ref([ { name: '单卡出售',value: 1 }, { name: '多卡出售',value: 2 } ])
@@ -152,7 +156,6 @@ const couponsInfo = ref([
 ])
 const descList = ref(['1、全部面值处理时效1-10分钟内结算欢迎新老客户提交！','2、卡号19-21位，卡密16位！无卡号的e卡请在卡号栏和卡密栏二空都填卡密！','3、只收通用卡，不收限品类的卡，如京品卡/图书卡(卡号JDY/JDX开头），提交限品卡自动返回失败，造成的损失可能无法追回，如导致本平台受损将追责；','4、若提交的卡密已被使用或错误，即便已拿到货款，后续也会被追责，故请认真核实；','5、卡密提交后，请勿擅自使用或一卡多卖，请珍惜自己的信用分；','6、仅回收合法渠道来源的卡券，严禁使用本平台进行销赃、诈骗、洗钱等违法犯罪活动，提交非法来源的卡券，如导致本平台受损，将报由司法机关追究法律责任；','7、请勿使用他人账号，严禁将账号借于他人使用，如导致本平台受损，将报由司法机关追责。'])
 const scoreList = ref([
-  { title: zhTransform('客服服务'),value: 5 },
   { title: zhTransform('回款速度'),value: 5 },
   { title: zhTransform('回首时效'),value: 5 },
 ])
@@ -161,9 +164,14 @@ const btnList = ref([
   { title: zhTransform('常见问题'), url: question },
 ])
 
-
 onMounted(async()=>{
-  let _res = await getCouponDetail(query.card)
+  let _card = query.card
+  if( _card === undefined ){
+    await useCouponCatHook().setCouponCat()
+    let _res = await getCouponInfo(useCouponCatHook().couponCat[0]._id)
+    _card = _res.data[0]._id
+  }
+  let _res = await getCouponDetail(_card)
   cardInfo.value = _res.data
   commitInfo.value.cartoryId = _res.data.categoryId
   commitInfo.value.cardId = _res.data._id
@@ -174,7 +182,18 @@ onMounted(async()=>{
   couponsInfo.value[3].value = (_res.data.facevalues[0] * ( _res.data.discount / 100 )) + 'HK$' + ''
 
   onChoseFaceValue(cardInfo.value.facevalues)
+
+  onGetComment()
 })
+// 获取评论
+const onGetComment = async () => {
+  let res = await orderComment()
+  commentList.value = res.data
+  // _list.forEach(item => {
+  //   item.score = JSON.parse(item.score)
+  // });
+  // scoreList.value = _list
+}
 
 const onChoseSell = (value) => {
   sellChose.value = value

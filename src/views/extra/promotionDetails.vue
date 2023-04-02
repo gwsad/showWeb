@@ -1,21 +1,22 @@
 <template>
   <div class="promotion">
     <div class="promotion__title">
-      <span>{{ zhTransform('新增收益+0.00') }}</span>
+      <span>{{ zhTransform(`新增收益+${userInfo.cash.extend.total + ''}`) }}</span>
       <span>{{ zhTransform('进行提现') }}</span>
     </div>
     <div class="promotion__body">
-      <div v-for="(item,index) in detailList" :key="index" class="promotion__body__item">
+      <div v-for="(item,index) in userInfo.cash.extend.list" :key="index" class="promotion__body__item">
         <span>{{ item.time }}</span>
-        <span>{{ item.money }}</span>
+        <span>+{{ item.amount }}</span>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import {ref,onMounted} from "vue";
+import {ref,onMounted,computed} from "vue";
 import {zhTransform}  from '@/utils'
 import { getMyPartner } from '@/api/home'
+import { useUserStoreHook } from '@/store/modules/user'
 const partnerList = ref([])
 const detailList = ref([
   {time: '2023-03-01 23:00:00', money: '0.00'},
@@ -24,6 +25,9 @@ const detailList = ref([
   {time: '2023-03-01 23:00:00', money: '0.00'},
   {time: '2023-03-01 23:00:00', money: '0.00'},
 ])
+const userInfo = computed(() => {
+  return useUserStoreHook().userInfo || {};
+});
 onMounted(() => {
   getMyPartner().then(res => {
     partnerList.value = res.data

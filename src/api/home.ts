@@ -77,3 +77,28 @@ export const getMyPartner = () => {
 export const getInviteNum = () => {
   return http.request("get", `/topic/userCount`);
 }
+
+// 获取支持银行
+export const getBankList = () => {
+  return http.request("get", `/withdraw`);
+}
+
+// 添加提现账号
+export const addBank = (data) => {
+  return http.request("post", `/user/setCashAccount`,{data});
+}
+
+// 发起提现
+export const withdraw = (data) => {
+  return http.request("post", `/withdraw`,{data});
+}
+
+// 获取提现记录
+export const getWithdrawList = (data) => {
+  return http.request("get", `/withdraw/list`,{params:data});
+}
+
+// 订单评价
+export const orderComment = () => {
+  return http.request("get", `/order/comment/list`);
+}

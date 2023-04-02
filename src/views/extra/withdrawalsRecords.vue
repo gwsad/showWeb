@@ -9,38 +9,42 @@
     <div class="orderList__body">
       <div class="orderList__body__item" v-for="(item,index) in cardList" :key="index">
         <div class="orderList__body__item__info">
-          <div>{{ zhTransform(item.title) }}</div>
-          <div>{{ zhTransform(item.time) }}</div>
+          <div>{{ zhTransform(item.accountInfo?.usdt?.name || item.accountInfo?.bank?.card || item.accountInfo?.alipay?.accountName) }} - {{ `${item.amount}HK$` }}</div>
+          <div>{{ zhTransform(item.createdAt || '') }}</div>
         </div>
         <div class="orderList__body__item__desc">
           <div>{{ item.price }}</div>
-          <div class="orderList__body__item__desc__common" :class="{'orderList__body__item__desc__1': item.status === 0 || item.status === 1,'orderList__body__item__desc__2' : item.status === 2,'orderList__body__item__desc__3' : item.status === 3}">{{ zhTransform(item.status === 0 ? '审批中' : item.status === 1 ? '打款中' : item.status === 2  ? '审批失败' : '已完成') }}</div>
+          <div class="orderList__body__item__desc__common" :class="{'orderList__body__item__desc__1': item.status.code === 1,'orderList__body__item__desc__2' :item.status.code === 2,'orderList__body__item__desc__3' :item.status.code === 3}">{{ zhTransform(item.status.code === 1 ? '审批中' : item.status.code === 2  ? '审批失败' : '已完成') }}</div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import {ref} from "vue";
+import {ref,onMounted} from "vue";
 import {zhTransform}  from '@/utils'
 import orderBg from '@/assets/order-bg.png'
 import tabChose from '@/assets/table-chose.png'
+import { getWithdrawList } from '@/api/home'
 
 const tabList = ref([
-  { name: '正在审批', value: 0 },
-  { name: '正在打款', value: 1 },
+  { name: '正在审批', value: 1 },
   { name: '审批失败', value: 2 },
   { name: '打款成功', value: 3 },
 ])
-const cardList = ref([
-  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 0,price: 'HK$ 80.00'},
-  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 0,price: 'HK$ 80.00'},
-  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 2,price: 'HK$ 80.00'},
-  {title: "话费卡 中国移动(快销)",time: '2023-10-23 23:11',status: 3,price: 'HK$ 80.00'}
-])
-const tab = ref(0)
+const cardList = ref([])
+const tab = ref(1)
 const onChoseTab = (value: number) => {
   tab.value = value
+  onGetList()
+}
+
+onMounted(async()=>{
+  onGetList()
+})
+const onGetList = async () => {
+  const res = await getWithdrawList({status: tab.value})
+  cardList.value = res.data
 }
 </script>
 <style lang="scss" scoped>

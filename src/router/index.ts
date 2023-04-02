@@ -201,7 +201,7 @@ router.beforeEach(async (to, from, next) => {
   if (typeof (to.meta?.title) === 'string') {
     document.title = zhTransform(to.meta?.title);
   }
-  if(!getToken()){
+  if(getToken()){
     if (to.path.indexOf('/enter') !== -1 || to.path.indexOf('/setAccount') !== -1) {
       try {
         await useCouponCatHook().setCouponCat();
@@ -213,12 +213,13 @@ router.beforeEach(async (to, from, next) => {
     }
     next()
   }else{
-    if(to.path === '/register'){
-      next()
-    }else{
-      showToast('用户信息失效，请重新登录！')
-      next('/register')
-    }
+     if(to.path === '/register'){
+        next()
+      }else{
+        showToast('用户信息失效，请重新登录！')
+        next('/register')
+      }
+    next()
   }
   next()
 })

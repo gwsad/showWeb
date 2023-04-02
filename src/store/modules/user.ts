@@ -10,7 +10,10 @@ import { setToken, removeToken } from "@/utils/auth";
 export const useUserStore = defineStore({
   id: "pure-user",
   state: () => ({
-    userInfo: {}
+    userInfo: {},
+    cashInfo: {
+      type: null
+    },
   }),
   actions: {
     /** 登入 */
@@ -43,6 +46,10 @@ export const useUserStore = defineStore({
           });
       });
     },
+    // 设置提现信息
+    setCashInfo(data) {
+      this.cashInfo = data;
+    }
   }
 });
 export function useUserStoreHook() {

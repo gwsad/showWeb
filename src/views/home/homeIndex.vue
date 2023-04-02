@@ -12,10 +12,11 @@
       </van-swipe>
     </div>
     <kind />
-    <div class="home__transform">
+    <!-- <div class="home__transform">
       <img :src="transform" alt="">
-    </div>
-    <img class="home__banner" :src="homeBanner" />
+      <span>{{ zhTransform('港回收拒绝一切通过传销、诈骗、洗钱、网络刷单等非法手段获取的充值卡，一经发现港回收有义务向公安机关反映。') }}</span>
+    </div> -->
+    <img class="home__banner" style="margin-top: 10px;" :src="homeBanner" />
     <div class="home__title">
       <img :src="homeHot" alt="">
       <span>{{ zhTransform('热门兑换') }}</span>
@@ -137,15 +138,24 @@ export default defineComponent({
   .home__transform{
     width: 69rem;
     height: 8.8rem;
+    line-height: 8.8rem;
     border-radius: 1.8rem;
     margin: 2.6rem auto;
     background: #fff;
     padding: 2rem 3rem;
     box-sizing: border-box;
     text-align: left;
+    // display: flex;
+    // align-items: center;
+    overflow: hidden;
     img{
       width: 4.8rem;
       height: 4.8rem;
+    }
+    span{
+      display: inline-block;
+      width: 100vw;
+      overflow: hidden;
     }
   }
   .home__banner{
