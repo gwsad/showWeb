@@ -112,6 +112,7 @@ const onLogin = async() => {
     default:
       break;
   }
+  console.log(loginInfo.value)
   try {
     let _res = await useUserStoreHook().loginByUsername({phone: loginInfo.value.phone, password: loginInfo.value.password})
     setToken(_res.data.token)

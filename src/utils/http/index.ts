@@ -75,6 +75,7 @@ class PureHttp {
         token && (config.headers["Authorization"] = "Bearer " + token)
         // 定义请求链接
         config.url = `${VITE_GLOB_API_URL}${config.url}`;
+        console.log(config.url)
         return new Promise(resolve => {
           resolve(config);
         })
