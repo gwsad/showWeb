@@ -68,19 +68,16 @@ class PureHttp {
           PureHttp.initConfig.beforeRequestCallback(config);
           return config;
         }
+
         /** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
         // 添加默认token
         const token = getToken();
         token && (config.headers["Authorization"] = "Bearer " + token)
-
-        const whiteList = ["/refreshToken", "/login"];
         // 定义请求链接
         config.url = `${VITE_GLOB_API_URL}${config.url}`;
-        return whiteList.some(v => config.url.indexOf(v) > -1)
-          ? config
-          : new Promise(resolve => {
-              resolve(config);
-            });
+        return new Promise(resolve => {
+          resolve(config);
+        })
       },
       error => {
         return Promise.reject(error);
