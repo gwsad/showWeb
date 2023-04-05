@@ -48,18 +48,14 @@
         </div>
       </div>
     </div>
-    <div class="sell-evaluate coupons-sell__common">
+    <!-- <div class="sell-evaluate coupons-sell__common">
       <div class="sell-evaluate__head">
         <div>
           <img :src="evaluate" alt="">
           <span>{{ zhTransform(`用户评价`) }}</span>
         </div>
-        <!-- <div>
-          <span>{{ zhTransform('查看全部') }}</span>
-          <img :src="more" alt="">
-        </div> -->
-      </div>
-      <div class="sell-evaluate__content" v-for="(item,index) in commentList" :key="index">
+      </div> -->
+      <!-- <div class="sell-evaluate__content" v-for="(item,index) in commentList" :key="index">
         <div class="sell-evaluate__content__head">
           <div>
             <img :src="logo" alt="">
@@ -74,7 +70,7 @@
             <img :src="score" alt="" v-for="(item,index) in 5" :key="index">
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="sell-evaluate__bottom">
       <div v-for="(item,index) in btnList" :key="index" @click="onGoPage(item.title)">
