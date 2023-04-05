@@ -29,7 +29,7 @@ const onChoseCard = (data) => {
   flex-wrap: wrap;
   justify-content: space-between;
   .face__item{
-    width: 21rem;
+    width: 22rem;
     height: 14.4rem;
     border-radius: 1.8rem;
     background: #fff;

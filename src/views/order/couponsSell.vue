@@ -71,7 +71,7 @@
           </div>
         </div>
       </div> -->
-    </div>
+    <!-- </div> -->
     <div class="sell-evaluate__bottom">
       <div v-for="(item,index) in btnList" :key="index" @click="onGoPage(item.title)">
         <img :src="item.url" alt="">
