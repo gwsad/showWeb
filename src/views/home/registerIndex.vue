@@ -41,6 +41,7 @@ import { useRouter } from "vue-router"
 import { ActionSheet,showToast,showConfirmDialog } from 'vant';
 import { create } from '@/api/home'
 import { useUserStoreHook } from "@/store/modules/user";
+import { useCouponCatHook } from "@/store/modules/card";
 const show = ref(false)
 const showBtn = ref(true)
 const { currentRoute } = useRouter();
@@ -125,8 +126,8 @@ const onLogin = async() => {
         loginInfo.value.invitationCode = String(loginInfo.value.invitationCode)
         let res = await create(Object.assign(loginInfo.value,{region: choseAddress.value}))
         if( res.code === 200 ){
-          console.log(res.data.token)
           setToken(res.data.token)
+          await useCouponCatHook().setCouponCat();
           await useUserStoreHook().handleGetUserInfo()
           router.push({path: '/enter/home'})
         }else{
