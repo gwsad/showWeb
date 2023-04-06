@@ -127,7 +127,6 @@ const onLogin = async() => {
         let res = await create(Object.assign(loginInfo.value,{region: choseAddress.value}))
         if( res.code === 200 ){
           setToken(res.data.token)
-          await useCouponCatHook().setCouponCat();
           await useUserStoreHook().handleGetUserInfo()
           router.push({path: '/enter/home'})
         }else{

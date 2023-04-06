@@ -14,7 +14,7 @@
           <div>{{ zhTransform(item.updatedAt) }}</div>
         </div>
         <div class="orderList__body__item__desc">
-          <div>{{ zhTransform('HK$' + ( item.facevalue * ( item.discount / 100 ) * item.cardInfos.length )) }}</div>
+          <div>{{ zhTransform('HK$' + ( item.amount * ( item.discount / 100 )  )) }}</div>
           <div class="orderList__body__item__desc__common" :class="{'orderList__body__item__desc__finished': item.status !== 1}">{{ zhTransform(item.status === 1 ? '处理中' : '已完成') }}</div>
         </div>
       </div>

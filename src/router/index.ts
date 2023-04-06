@@ -202,6 +202,14 @@ router.beforeEach(async (to, from, next) => {
     document.title = zhTransform(to.meta?.title);
   }
   if(getToken()){
+    if (to.path.indexOf('/enter') !== -1 || to.path.indexOf('/setAccount') !== -1) {
+      try {
+        await useCouponCatHook().setCouponCat();
+      } catch (error) {
+        showToast('用户信息失效，请重新登录！')
+
+      }
+    }
     next()
   }else{
      if(to.path === '/register'){
