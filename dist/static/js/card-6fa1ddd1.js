@@ -1,0 +1,1 @@
+import{X as t,Y as a}from"./index-2e3f701e.js";import{i as e}from"./home-cd0a2bf0.js";const n=t({id:"pure-app",state:()=>({couponCat:[]}),getters:{getCouponCat(){return this.couponCat}},actions:{async setCouponCat(){const o=await e();this.couponCat=o.data}}});function u(){return n(a)}export{u};

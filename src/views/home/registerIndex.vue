@@ -117,6 +117,7 @@ const onLogin = async() => {
   try {
     let _res = await useUserStoreHook().loginByUsername({phone: loginInfo.value.phone, password: loginInfo.value.password})
     setToken(_res.data.token)
+    await useCouponCatHook().setCouponCat();
     await useUserStoreHook().handleGetUserInfo()
     router.push({path: '/enter/home'})
   } catch (error) {
@@ -127,6 +128,7 @@ const onLogin = async() => {
         let res = await create(Object.assign(loginInfo.value,{region: choseAddress.value}))
         if( res.code === 200 ){
           setToken(res.data.token)
+          await useCouponCatHook().setCouponCat();
           await useUserStoreHook().handleGetUserInfo()
           router.push({path: '/enter/home'})
         }else{
