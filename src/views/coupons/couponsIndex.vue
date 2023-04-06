@@ -10,9 +10,9 @@
     <div class="coupons__title">
       <div>
         <img :src="hot" alt="">
-        <span>{{ zhTransform('话费') }}</span>
+        <span>{{ zhTransform(tabList[tab - 1] ? tabList[tab - 1].name + '' : '') }}</span>
       </div>
-      <span>{{ zhTransform(`高价回收${'话费'}卡`) }}</span>
+      <span>{{ zhTransform(`高价回收${tabList[tab - 1] ? tabList[tab - 1].name + '' : ''}卡`) }}</span>
     </div>
     <div class="coupons__content">
       <CardList :list="cardList" @onChoseCard="onChoseCard" />

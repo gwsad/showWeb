@@ -207,7 +207,7 @@ router.beforeEach(async (to, from, next) => {
         await useCouponCatHook().setCouponCat();
       } catch (error) {
         showToast('用户信息失效，请重新登录！')
-
+        next('/register')
       }
     }
     next()
