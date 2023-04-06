@@ -35,15 +35,15 @@ export default ({ command, mode }) => {
     resolve: {
       alias
     },
-    proxy: {
-      "/": {
-        target: 'localhost:7001',
-        changeOrigin: true, // 设置这个参数可以避免跨域
-        pathRewrite: {
-          "^/": "/"
-        }
-      }
-    },
+    // proxy: {
+    //   "/": {
+    //     target: 'localhost:7001',
+    //     changeOrigin: true, // 设置这个参数可以避免跨域
+    //     pathRewrite: {
+    //       "^/": "/"
+    //     }
+    //   }
+    // },
     // 服务端渲染
     server: {
       // 是否开启 https
