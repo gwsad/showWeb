@@ -5,13 +5,13 @@
       <p>{{ zhTransform('可提现金额') }}</p>
       <p class="withdraw__cash">{{ zhTransform(userInfo.cash.extend.total + '')}}</p>
       <div class="withdraw__detail" @click="onDetail">
-        <div>{{ zhTransform(`推广收益 +${(userInfo.cashTotal / 100).toFixed(2)} 明细`) }}</div>
+        <div>{{ zhTransform(`推广收益 +${userInfo.cash.extend.total} 明细`) }}</div>
         <img :src="more" alt="">
       </div>
       <div class="withdraw__money easy__page">
         <div class="withdraw__money__title">{{ zhTransform('提现金额(HK$)') }}</div>
         <div class="withdraw__money__item">
-          <field placeholder="0.00" v-model="withdrawInfo.cashMoney" />
+          <field :placeholder="userInfo.cashTotal" v-model="withdrawInfo.cashMoney" />
           <div class="withdraw__money__item__one" @click="onCash">{{ zhTransform('全部提现') }}</div>
         </div>
         <!-- <div class="withdraw__money__item">
