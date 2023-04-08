@@ -14,7 +14,7 @@
         </div>
         <div class="orderList__body__item__desc">
           <div>{{ item.price }}</div>
-          <div class="orderList__body__item__desc__common" :class="{'orderList__body__item__desc__1': item.status.code === 1,'orderList__body__item__desc__2' :item.status.code === 2,'orderList__body__item__desc__3' :item.status.code === 3}">{{ zhTransform(item.status.code === 1 ? '审批中' : item.status.code === 2  ? '审批失败' : '已完成') }}</div>
+          <div class="orderList__body__item__desc__common" :class="{'orderList__body__item__desc__1': item.status.code === 1,'orderList__body__item__desc__2' :item.status.code === 3,'orderList__body__item__desc__3' :item.status.code === 2}">{{ zhTransform(item.status.code === 1 ? '审批中' : item.status.code === 2  ? '提现成功' : '提现失败') }}</div>
         </div>
       </div>
     </div>
@@ -29,8 +29,8 @@ import { getWithdrawList } from '@/api/home'
 
 const tabList = ref([
   { name: '正在审批', value: 1 },
-  { name: '审批失败', value: 2 },
-  { name: '打款成功', value: 3 },
+  { name: '提现成功', value: 2 },
+  { name: '提现失败', value: 3 },
 ])
 const cardList = ref([])
 const tab = ref(1)
