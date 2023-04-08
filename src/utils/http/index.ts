@@ -108,7 +108,6 @@ class PureHttp {
         console.log('error', error);
         if( error.response.data.code === 401 ){
           const router = useRouter()
-          showToast('登录过期，请重新登录')
           removeToken()
           router.push('/register')
         }
