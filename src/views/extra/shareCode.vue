@@ -6,7 +6,7 @@
       <p>{{ zhTransform(`我的邀请码`) }}</p>
       <span>{{ zhTransform(userInfo.invitationCode) }}</span>
       <div @click="copyUrl(userInfo.invitationCode)">{{ zhTransform(`保存邀请码`) }}</div>
-      <div @click="onShareCode(userInfo.invitationCode)">{{ zhTransform(`分享链接给朋友`) }}</div>
+      <!-- <div @click="onShareCode(userInfo.invitationCode)">{{ zhTransform(`分享链接给朋友`) }}</div> -->
     </div>
   </div>
 </template>
