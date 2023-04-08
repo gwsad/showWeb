@@ -6,7 +6,7 @@
       <p>{{ zhTransform(`我的邀请码`) }}</p>
       <span>{{ zhTransform(userInfo.invitationCode) }}</span>
       <div @click="copyUrl(userInfo.invitationCode)">{{ zhTransform(`保存邀请码`) }}</div>
-      <!-- <div @click="onShareCode(userInfo.invitationCode)">{{ zhTransform(`分享链接给朋友`) }}</div> -->
+      <div @click="onShareCode(userInfo.invitationCode)">{{ zhTransform(`分享链接给朋友`) }}</div>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ const copyUrl = (value)=> {
 
 }
 const onShareCode = (value) => {
-  let url = `http://hongkongshou.com/#/register?shareCode=${value}` ;
+  let url = `http://www.hongkongshou.com/#/register?shareCode=${value}` ;
   let domInput = document.createElement('input');
   domInput.value = url;
   document.body.appendChild(domInput);  // 添加input节点
