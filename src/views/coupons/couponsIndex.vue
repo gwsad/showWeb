@@ -42,7 +42,8 @@ const onChoseTab = (value: number,id) => {
   getTabData(id)
 }
 const onChoseCard = (card: any) => {
-  router.push({path: '/couponsSell', query: {card}})
+  console.log(card)
+  router.push({path: '/couponsSell', query: {card:card._id}})
 }
 const getTabData = async (id: string) => {
   const _list = await getCouponInfo(id)
