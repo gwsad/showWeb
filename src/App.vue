@@ -4,6 +4,8 @@
 
 
 <script>
+import { useUserStoreHook } from "@/store/modules/user";
+import { useCouponCatHook } from "@/store/modules/card";
 // 定义好rem尺寸为 1px = 0.1rem
 (function(doc, win) {
 	var docEl = doc.documentElement,
@@ -17,6 +19,9 @@
 	win.addEventListener(resizeEvt, recalc, false);
 	doc.addEventListener("DOMContentLoaded", recalc, false);
 })(document, window);
+
+useUserStoreHook().handleGetUserInfo()
+useCouponCatHook().setCouponCat();
 </script>
 
 <style lang="scss">

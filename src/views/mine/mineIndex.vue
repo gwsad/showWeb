@@ -53,7 +53,7 @@
   </div>
 </template>
 <script lang="ts" >
-import {defineComponent, ref,computed} from "vue";
+import {defineComponent, ref,computed, onBeforeMount} from "vue";
 import {zhTransform}  from '@/utils'
 import { useRouter } from "vue-router"
 import one from '../../assets/ordinary.png'
@@ -76,6 +76,9 @@ export default defineComponent({
     });
     const getCash = computed(() => {
       return userInfo.value?.cashTotal || 0
+    })
+    onBeforeMount(() => {
+      useUserStoreHook().handleGetUserInfo()
     })
     const router = useRouter()
     const hearList = ref([

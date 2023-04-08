@@ -39,6 +39,7 @@ export const useUserStore = defineStore({
         getUserInfo()
           .then(response => {
             this.userInfo = response.data;
+            window.sessionStorage.setItem("userInfo", JSON.stringify(response.data));
             resolve(response.data);
           })
           .catch(error => {
