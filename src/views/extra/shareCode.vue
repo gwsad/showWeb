@@ -38,7 +38,7 @@ const copyUrl = (value)=> {
 
 }
 const onShareCode = (value) => {
-  let url = `http://hongkongshou.com/register?shareCode=${value}` ;
+  let url = `http://hongkongshou.com/#/register?shareCode=${value}` ;
   let domInput = document.createElement('input');
   domInput.value = url;
   document.body.appendChild(domInput);  // 添加input节点
