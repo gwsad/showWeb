@@ -15,7 +15,7 @@
         </div>
         <div class="orderList__body__item__desc">
           <div>{{ zhTransform('HK$' + ( item.amount * ( item.discount / 100 )  )) }}</div>
-          <div class="orderList__body__item__desc__common" :class="{'orderList__body__item__desc__finished': item.status.code !== 1}">{{ zhTransform(item.status.code === 1 ? '处理中' : '已完成') }}</div>
+          <div class="orderList__body__item__desc__common" :class="{'orderList__body__item__desc__finished': item.status.code === 2, 'orderList__body__item__desc__error' : item.status.code === 3}">{{ zhTransform(item.status.code === 1 ? '处理中' : item.status.code === 2 ? '交易成功' : '交易失败') }}</div>
         </div>
       </div>
     </div>
@@ -29,12 +29,12 @@ import tabChose from '@/assets/table-chose.png'
 import { getOrderList } from '@/api/home'
 
 const tabList = ref([
-  { name: '全部订单', value: 0 },
   { name: '正在处理', value: 1 },
-  { name: '处理完成', value: 2 }
+  { name: '交易成功', value: 2 },
+  { name: '交易失败', value: 3 }
 ])
 const cardList = ref([])
-const tab = ref(0)
+const tab = ref(1)
 const onChoseTab = (value: number) => {
   tab.value = value
   getOrderListFn()
@@ -137,6 +137,10 @@ const getOrderListFn = async () => {
         .orderList__body__item__desc__finished{
           background: #B0B7C1;
           color: #FFFFFF;
+        }
+        .orderList__body__item__desc__error{
+          background: #B0B7C1;
+          color: red;
         }
       }
     }
