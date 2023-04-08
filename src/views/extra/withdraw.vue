@@ -71,8 +71,7 @@ const cashInfo = computed(() => {
 const withdrawInfo = ref({cashMoney: null});
 const tipsList = ref([
   '*最低提现1.00元 单笔提现不能超过10000.00元',
-  '*单卡每日限额20000.00元',
-  '*同一用户单日首飞次数限制10次，超过显示提现失败，第二天可继续提现'
+  '*单卡每日限额20000.00元'
 ])
 onMounted(() => {
   withdrawInfo.value.cashMoney = JSON.parse(window.localStorage.getItem('cash') || 'null')
@@ -96,7 +95,10 @@ const onConfirm = async() => {
     return showToast('请选择到账方式')
   }
   if( Number(withdrawInfo.value.cashMoney) < 1 ){
-    return showToast('提现金额不能大于可提现金额')
+    return showToast('提现金额不能小于1')
+  }
+  if( Number(withdrawInfo.value.cashMoney) > 20000 ){
+    return showToast('提现金额不能大于20000')
   }
   if( Number(withdrawInfo.value.cashMoney) > userInfo.value.cashTotal ){
     return showToast('提现金额不能大于可提现金额')

@@ -121,6 +121,9 @@ const onLogin = async() => {
     await useUserStoreHook().handleGetUserInfo()
     router.push({path: '/enter/home'})
   } catch (error) {
+    if (error.code === 20002) {
+      showToast({ message: zhTransform('密码输入错误'),  duration: 2000 })
+    }
     if( error.code === 20006 ){
       showConfirmDialog({ message: '未检测到账户，平台将会使用该号码注册账号，是否确认？', })
       .then(async () => {
