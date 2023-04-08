@@ -6,7 +6,6 @@ import { showToast } from 'vant';
 import { useUserStoreHook, } from "@/store/modules/user";
 import { useCouponCatHook } from "@/store/modules/card";
 const routes: Array<RouteRecordRaw> = [
-  { path: '*', redirect: '/register' },
   {
     path: '/enter',
     name: 'enter',
