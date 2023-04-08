@@ -12,6 +12,8 @@ import {
 import { getToken } from "@/utils/auth";
 import { showToast } from 'vant';
 import { stringify } from "qs";
+import { useRouter } from "vue-router"
+import { removeToken } from "@/utils/auth";
 // import { formatToken } from "@/utils/auth";
 const { VITE_GLOB_API_URL } = import.meta.env;
 
@@ -103,6 +105,13 @@ class PureHttp {
         return response.data;
       },
       (error: PureHttpError) => {
+        console.log('error', error);
+        if( error.response.data.code === 401 ){
+          const router = useRouter()
+          showToast('登录过期，请重新登录')
+          removeToken()
+          router.push('/register')
+        }
         // showToast('服务器错误')
         const $error = error;
         $error.isCancelRequest = Axios.isCancel($error);
