@@ -21,7 +21,7 @@ const kindList = ref([
   {imgUrl: come, title: zhTransform('加油')},
   {imgUrl: shop, title: zhTransform('电商')}
 ])
-kindList.value.forEach((item: any) => {
+useCouponCatHook().couponCat.length !== 0 && kindList.value.forEach((item: any) => {
   item._id = useCouponCatHook().couponCat.find((i) => i.name === item.title)._id
 })
 const onChoseKind = (data) => {
