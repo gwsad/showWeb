@@ -115,7 +115,7 @@ const onLogin = async() => {
   }
   console.log(loginInfo.value)
   try {
-    let _res = await useUserStoreHook().loginByUsername({phone: loginInfo.value.phone, password: loginInfo.value.password, region: loginInfo.value.invitationCode})
+    let _res = await useUserStoreHook().loginByUsername({phone: loginInfo.value.phone, password: loginInfo.value.password})
     setToken(_res.data.token)
     await useCouponCatHook().setCouponCat();
     await useUserStoreHook().handleGetUserInfo()
