@@ -148,7 +148,7 @@ const cardInfo = ref({})
 const cardList = ref([])
 const faceList = ref([])
 const couponsInfo = ref([
-  { title:'选择卡类',value:'1'  }, { title:'选择卡种',value:'1' }, { title:'选择面值',value:'1' }, { title:'回收价格',value:'1' },
+  { title:'选择卡类',value:'请选择'  }, { title:'选择卡种',value:'请选择' }, { title:'选择面值',value:'请选择' }, { title:'回收价格',value:'请选择' }
 ])
 const descList = ref(['1、全部面值处理时效1-10分钟内结算欢迎新老客户提交！','2、卡号19-21位，卡密16位！无卡号的e卡请在卡号栏和卡密栏二空都填卡密！','3、只收通用卡，不收限品类的卡，如京品卡/图书卡(卡号JDY/JDX开头），提交限品卡自动返回失败，造成的损失可能无法追回，如导致本平台受损将追责；','4、若提交的卡密已被使用或错误，即便已拿到货款，后续也会被追责，故请认真核实；','5、卡密提交后，请勿擅自使用或一卡多卖，请珍惜自己的信用分；','6、仅回收合法渠道来源的卡券，严禁使用本平台进行销赃、诈骗、洗钱等违法犯罪活动，提交非法来源的卡券，如导致本平台受损，将报由司法机关追究法律责任；','7、请勿使用他人账号，严禁将账号借于他人使用，如导致本平台受损，将报由司法机关追责。'])
 const scoreList = ref([
@@ -252,7 +252,6 @@ const onChoseFace = (item:any) => {
   couponsInfo.value[2].value = item.title
   couponsInfo.value[3].value = item.price
   show.value = false
-  console.log(commitInfo.value)
 }
 
 const onGoPage = (title) => {
@@ -295,7 +294,7 @@ const onCommit = async()=>{
 const onChoseFaceValue = (list) => {
   faceList.value = []
   list.forEach((item)=>{
-    faceList.value.push({title: item + '港元', discount: cardInfo.value.discount + '折', price: 'HK$' + item * ( cardInfo.value.discount / 100 )})
+    faceList.value.push({title: item + '港元', discount: cardInfo.value.discount + '折', price: '' + item * ( cardInfo.value.discount / 100 )})
   })
 }
 </script>
