@@ -4,8 +4,10 @@
 
 
 <script>
+// import { useRouter } from "vue-router"
 import { useUserStoreHook } from "@/store/modules/user";
 import { useCouponCatHook } from "@/store/modules/card";
+// const router = useRouter()
 // 定义好rem尺寸为 1px = 0.1rem
 (function(doc, win) {
 	var docEl = doc.documentElement,
@@ -22,6 +24,8 @@ import { useCouponCatHook } from "@/store/modules/card";
 
 useUserStoreHook().handleGetUserInfo()
 useCouponCatHook().setCouponCat();
+console.log('app',window.location)
+// router.push('/register')
 </script>
 
 <style lang="scss">
