@@ -221,6 +221,9 @@ router.beforeEach(async (to, from, next) => {
         showToast('用户信息失效，请重新登录！')
         next('/register')
       }
+      if( to.path === '/' ){
+        next('/register')
+      }
     next()
   }
   next()
