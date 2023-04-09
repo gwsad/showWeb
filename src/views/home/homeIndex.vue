@@ -21,7 +21,7 @@
       <span >
         <span>{{ zhTransform('交易过程如有疑问，请添加官方账号（点击账号复制）') }}</span>
         <p>Telegram：<span @click="onCopy('@Ganghuishou')">@Ganghuishou</span></p>
-        <p>Line：<span @click="onCopy('+85264827676')">+85264827676</span></p>
+        <p>Line：<span @click="onCopy('ganghuishou')">ganghuishou</span></p>
       </span>
     </div>
     <div class="home__title">
