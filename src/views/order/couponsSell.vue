@@ -72,6 +72,7 @@
         </div>
       </div> -->
     <!-- </div> -->
+
     <div class="sell-evaluate__bottom">
       <div v-for="(item,index) in btnList" :key="index" @click="onGoPage(item.title)">
         <img :src="item.url" alt="">
@@ -99,6 +100,7 @@
         <img :src="cancel" alt="">
       </div>
     </Dialog>
+
   </div>
 </template>
 <script lang="ts" setup>
@@ -297,6 +299,8 @@ const onChoseFaceValue = (list) => {
     faceList.value.push({title: item + '港元', discount: cardInfo.value.discount + '折', price: '' + item * ( cardInfo.value.discount / 100 )})
   })
 }
+
+
 </script>
 <style lang="scss">
 .coupons-sell{
@@ -611,6 +615,7 @@ const onChoseFaceValue = (list) => {
     }
   }
 }
+
 </style>
 <style lang="scss">
 .coupons-sell{

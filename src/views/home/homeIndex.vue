@@ -17,6 +17,13 @@
       <span>{{ zhTransform('港回收拒绝一切通过传销、诈骗、洗钱、网络刷单等非法手段获取的充值卡，一经发现港回收有义务向公安机关反映。') }}</span>
     </div> -->
     <img class="home__banner" style="margin-top: 10px;" :src="homeBanner" />
+    <div class="easy__page withdraw__tips">
+      <span >
+        <span>{{ zhTransform('交易过程如有疑问，请添加官方账号（点击账号复制）') }}</span>
+        <p>Telegram：<span @click="onCopy('@Ganghuishou')">@Ganghuishou</span></p>
+        <p>Line：<span @click="onCopy('+85264827676')">+85264827676</span></p>
+      </span>
+    </div>
     <div class="home__title">
       <img :src="homeHot" alt="">
       <span>{{ zhTransform('热门兑换') }}</span>
@@ -33,6 +40,7 @@ import { useRouter } from "vue-router"
 import kind from '@/components/kind.vue'
 import cardList from '@/components/cardList.vue'
 import {zhTransform}  from '@/utils'
+import {showToast} from 'vant'
 import transform from '../../assets/home-transform.png'
 import homeBanner from '../../assets/home-banner.png'
 import homeHot from '../../assets/home-hot.png'
@@ -55,6 +63,17 @@ export default defineComponent({
       console.log(card)
       router.push({path: '/couponsSell', query: {card:card._id}})
     }
+    // 复制
+    const onCopy = (value) => {
+      let url = value;
+      let domInput = document.createElement('input');
+      domInput.value = url;
+      document.body.appendChild(domInput);  // 添加input节点
+      domInput.select(); // 选择对象;
+      document.execCommand("Copy"); // 执行浏览器复制命令
+      domInput.remove()
+      showToast({ message: zhTransform('复制成功'), duration: 2000 })
+    }
 
     onMounted(async ()=>{
       try {
@@ -74,10 +93,12 @@ export default defineComponent({
       cardList,
       zhTransform,
       onChoseKind,
-      onChoseCard
+      onChoseCard,
+      onCopy
     }
   },
 })
+
 </script>
 <style lang="scss" scoped>
 .home{
@@ -181,6 +202,16 @@ export default defineComponent({
     display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
+  }
+}
+.withdraw__tips{
+  margin-top: 2.4rem;
+  margin-bottom: 2.4rem;
+  p{
+    font-size: 2rem;
+    color: #FE6F00;
+    line-height: 2.4rem;
+    margin-bottom: 2rem;
   }
 }
 </style>
