@@ -215,6 +215,8 @@ router.beforeEach(async (to, from, next) => {
     // }
     next()
   }else{
+    console.log(to.path,to.path === '/')
+
      if(to.path === '/register'){
         next()
       }else{

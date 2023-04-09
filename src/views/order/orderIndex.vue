@@ -41,7 +41,6 @@ const onChoseTab = (value: number) => {
 }
 
 onBeforeMount(()=>{
-  console.log('onBeforeMount')
   getOrderListFn()
 })
 
