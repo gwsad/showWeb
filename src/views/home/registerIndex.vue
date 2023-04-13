@@ -71,6 +71,11 @@ onBeforeMount(() => {
   if( query.shareCode ){
     loginInfo.value.invitationCode = query.shareCode
   }
+  if( window.localStorage.getItem('accountInfo') !== null ){
+    const accountInfo = JSON.parse(window.localStorage.getItem('accountInfo') || '')
+    loginInfo.value.phone = accountInfo.phone
+    loginInfo.value.password = accountInfo.password
+  }
 })
 const onLogin = async() => {
   if(!loginInfo.value.phone){
@@ -113,12 +118,12 @@ const onLogin = async() => {
     default:
       break;
   }
-  console.log(loginInfo.value)
   try {
     let _res = await useUserStoreHook().loginByUsername({phone: loginInfo.value.phone, password: loginInfo.value.password})
     setToken(_res.data.token)
     await useCouponCatHook().setCouponCat();
     await useUserStoreHook().handleGetUserInfo()
+    window.localStorage.setItem('accountInfo',JSON.stringify(loginInfo.value))
     router.push({path: '/enter/home'})
   } catch (error) {
     if (error.code === 20002) {
