@@ -39,11 +39,11 @@ import AddZFB from '@/components/addZFB.vue'
 import { addBank } from '@/api/home'
 import { useUserStoreHook, } from "@/store/modules/user";
 const router = useRouter()
-const tab = ref(2)
+const tab = ref(1)
 const addOpen = ref(false) // 添加银行账户弹窗
 const choseType = ref(null)
 const tabList = ref([
-  // {name: 'USDT账户',value:1},
+  {name: 'USDT账户',value:1},
   {name: '银行卡账户',value:2},
   {name: '支付宝账户',value:3}
 ])
